@@ -1,8 +1,8 @@
 <script lang="ts">
-	import zerogas from '$lib/images/zerogas.svg';
-	import compatible from '$lib/images/compatible.svg';
-	import orderbook from '$lib/images/orderbook.svg';
-	import announce from '$lib/images/announce.svg';
+	import zerogas from '$lib/images/home/zerogas.svg';
+	import compatible from '$lib/images/home/compatible.svg';
+	import orderbook from '$lib/images/home/orderbook.svg';
+	import announce from '$lib/images/home/announce.svg';
 
 	const feats = [
 		{ logo: zerogas, title: 'Zero Gas', desc: 'Using ChoccySwap only involves a liquidity fee.' },

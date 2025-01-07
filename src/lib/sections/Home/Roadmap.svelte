@@ -189,7 +189,7 @@
 	}
 
 	#alltasks {
-		background-image: url('$lib/images/Roadmap.svg');
+		background-image: url('$lib/images/home/Roadmap.svg');
 		width: 130cm;
 		background-repeat: repeat-x;
 		background-position-y: bottom;

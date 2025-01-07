@@ -8,6 +8,12 @@
     justify-content: center;
 }
 
+.widecenter {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
 #header-content #topbarmenu.open {
     display: flex;
     flex-direction: column;

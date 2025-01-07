@@ -23,7 +23,6 @@
 					if (idx < i) return sum + v;
 					return sum
 				}, 0)
-				console.log(heights, offset, i);
 				scrollPos = -offset;
 			});
 		});
@@ -215,7 +214,7 @@
 		}
 	}
 	#alltasks {
-		background-image: url('$lib/images/Roadmap vert.svg');
+		background-image: url('$lib/images/home/Roadmap vert.svg');
 		height: 88cm;
 		padding-bottom: 2cm;
 		width: 100%;

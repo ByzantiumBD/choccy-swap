@@ -1,9 +1,9 @@
 <script>
-	import X from '$lib/images/x.svg';
-	import telegram from '$lib/images/telegram.svg';
-	import discord from '$lib/images/discord.svg';
-	import coingecko from '$lib/images/coingecko.svg';
-	import writing from '$lib/images/writing.svg';
+	import X from '$lib/images/home/x.svg';
+	import telegram from '$lib/images/home/telegram.svg';
+	import discord from '$lib/images/home/discord.svg';
+	import coingecko from '$lib/images/home/coingecko.svg';
+	import writing from '$lib/images/common/writing.svg';
 </script>
 
 <div class="relative">

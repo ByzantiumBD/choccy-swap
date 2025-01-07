@@ -26,7 +26,7 @@
 
 <style lang="less">
     #container:before {
-        background-image: url("$lib/images/bg.svg");
+        background-image: url("$lib/images/common/bg.svg");
         background-size: 70cm;
         background-position: center;
         opacity: 30%;

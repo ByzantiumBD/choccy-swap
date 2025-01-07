@@ -1,22 +1,21 @@
 <script lang="ts">
-	import mna from '$lib/images/My-Neighbor-Alice_Logo.png';
-	import cwlogo from '$lib/images/cwlogo.svelte';
-	import cwtext from '$lib/images/cwtext.svelte';
-	import chromia from '$lib/images/logo-chromia.svg';
-
-	const SvelteComponent = $derived(cwlogo);
-	const SvelteComponent_1 = $derived(cwtext);
+	import mna from '$lib/images/home/My-Neighbor-Alice_Logo.png';
+	import Cwlogo from '$lib/images/home/cwlogo.svelte';
+	import Cwtext from '$lib/images/home/cwtext.svelte';
+	import chromia from '$lib/images/home/logo-chromia.svg';
 </script>
 
 <div id="Partners" class="allcenter flex-col mt-[100px]">
 	<h2 id="gradient-title" class="text-3xl p-[20px] text-center">Our Ecosystem Partners</h2>
 	<div class="allcenter min-[707px]:space-x-10 max-[706px]:flex-col">
-		<img src={mna} class="w-[150px]" alt="my neighbor alice logo" />
-		<div class="cw flex">
-			<SvelteComponent />
-			<SvelteComponent_1 />
-		</div>
-		<img src={chromia} class="w-[150px]" alt="chromia logo" />
+		<a href="https://www.myneighboralice.com/"
+			><img src={mna} class="w-[150px]" alt="my neighbor alice logo" />
+		</a>
+		<a class="cw flex" href="https://chromaway.com/">
+			<Cwlogo />
+			<Cwtext />
+		</a>
+		<a href="https://chromia.com/"><img src={chromia} class="w-[150px]" alt="chromia logo" /></a>
 	</div>
 </div>
 

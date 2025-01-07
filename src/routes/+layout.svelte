@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Background from '$lib/components/background.svelte';
+	import Background from '$lib/components/common/background.svelte';
 	import '@fontsource/roboto';
 	import '../app.css';
 	import { page } from '$app/state';
-	import Footer from '$lib/components/footer.svelte';
-	import Header from '$lib/components/header.svelte';
+	import Footer from '$lib/components/home/footer.svelte';
+	import Header from '$lib/components/common/header.svelte';
 
 	let { children } = $props();
 
