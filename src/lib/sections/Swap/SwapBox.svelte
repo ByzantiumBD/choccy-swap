@@ -115,7 +115,7 @@
 		const slipPrecision = 100000;
 		const slip = BigInt((100-slippage)*slipPrecision);
 
-		await session.call(
+		const txReceipt = await session.call(
 			getCorrectSwapOperation(
 				pair1,
 				pair2,
@@ -129,8 +129,13 @@
 			)
 		)
 
+		const txRid = txReceipt.receipt.transactionRid;
+
 		updateBalances();
-		success("Swap succeeded!", "https://choccyswap.com");
+		success(
+			"Swap succeeded!",
+			"https://explorer.chromia.com/testnet/FA289E086E3D6C3277336E270BADDF75035C1F049F242AB2CF61773D2822213D/transaction/" + txRid.toString("hex")
+		);
 	}
 
 	async function updateInputs(changedInput: boolean) {
