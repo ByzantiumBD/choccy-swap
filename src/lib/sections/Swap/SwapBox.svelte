@@ -8,9 +8,9 @@
 	import { getPairs, getTokenInfo } from '$lib/interactions/utils';
 	import { calcInput, calcOutput, getCorrectSwapOperation } from '$lib/interactions/routes';
 	import type { Pair, TokenInfo } from '$lib/types';
-	import { getAssetId, isCcy, setUpdater, shortenNumber } from '$lib/utils';
+	import { getAssetId, isCcy, setUpdater, makeNumberReadable } from '$lib/utils';
 	import { createAmount, createAmountFromBalance, type Amount, type Asset } from '@chromia/ft4';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { SwapError } from '$lib/errors';
 	import { calcImpact } from '$lib/interactions/swaps';
 
@@ -39,7 +39,7 @@
 
 	$effect(()=>{
 		if (isCalculating) return;
-		checkInputs(_input1, _input2);
+		checkInputs(input1, input2);
 	})
 
 	let pair1: Pair | undefined = $state(undefined);
@@ -112,7 +112,8 @@
 		if (!token2) throw new SwapError('Token 2 is not defined');
 
 		const swapDeadline = Date.now() + deadline*MILLIS_PER_MINUTE;
-		const slip = BigInt(100-slippage);
+		const slipPrecision = 100000;
+		const slip = BigInt((100-slippage)*slipPrecision);
 
 		await session.call(
 			getCorrectSwapOperation(
@@ -121,7 +122,7 @@
 				isCcy(token2.asset),
 				_input1,
 				createAmountFromBalance(
-					(_input2.value * slip)/100n,
+					(_input2.value * slip)/(100n*BigInt(slipPrecision)),
 					_input2.decimals
 				),
 				swapDeadline
@@ -158,7 +159,7 @@
 				_input1 = input;
 			}
 			if (_input1.value !== 0n && _input2.value !== 0n){
-				impact = Number(shortenNumber(calcImpact(
+				impact = Number(makeNumberReadable(calcImpact(
 					pair1,
 					pair2,
 					_input1.value,
@@ -171,13 +172,13 @@
 		}
 	}
 
-	function checkInputs(_input1: Amount, _input2: Amount) {
-		if (input1 !== _input1.toString()) {
+	function checkInputs(input1: string, input2: string) {
+		if (untrack(()=>_input1).toString() !== input1) {
 			lastEditedInput = true;
-			updateInputs(lastEditedInput)
-		} else if (input2 !== _input2.toString()) {
+			updateInputs(untrack(()=>lastEditedInput))
+		} else if (untrack(()=>_input2).toString() !== input2) {
 			lastEditedInput = false;
-			updateInputs(lastEditedInput)
+			updateInputs(untrack(()=>lastEditedInput))
 		}
 	}
 
@@ -220,9 +221,9 @@
 		<div class="flex items-stretch flex-col self-stretch mx-8 text-sm opacity-50 mt-2">
 			<div class="flex justify-between max-[730px]:flex-col">
 				<span>
-					Swap {Number(input1.toString())}
+					Swap {makeNumberReadable(input1.toString())}
 						 {token1?.asset.symbol} 
-					for {Number(input2.toString())}
+					for {makeNumberReadable(input2.toString())}
 						{token2?.asset.symbol}
 				</span>
 				<span>Price Impact: {impact}%</span>

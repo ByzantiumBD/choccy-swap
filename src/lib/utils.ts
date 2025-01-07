@@ -41,6 +41,20 @@ export function shortenId(id: Buffer) {
 }
 
 export function shortenNumber(number: string) {
+    const integer = number.replace(/^0+(?=[1-9])/, "").match(/^\d+/)?.[0];
+    const decimal = number.match(/(?<=\.)\d+$/)?.[0];
+
+    if (integer === undefined || integer.match(/^0+$/)) {
+        if (decimal === undefined) return "0";
+        return "0."+decimal.slice(0,6)
+    } else {
+        if (decimal === undefined || decimal.match(/^0+$/)) return integer
+        return integer+"."+decimal.slice(0,3)
+    }
+}
+    
+
+export function makeNumberReadable(number: string) {
     const integer = number.match(/^\d+/)?.[0];
     const decimal = number.match(/(?<=\.)\d+$/)?.[0];
 

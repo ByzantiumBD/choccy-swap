@@ -47,12 +47,9 @@ export function calcImpact(
     } else {
         const p1 = calcPrice(pair1.amount1, pair1.amountCcy)
         const p2 = calcPrice(pair2.amountCcy, pair2.amount1)
-        console.log("price 1:", 1000n*p1/PRICE_PRECISION, pair1)
-        console.log("price 2:", 1000n*p2/PRICE_PRECISION, pair2)
 
         const expectedPrice = p1 * p2 / PRICE_PRECISION;
         const actualPrice = calcPrice(amountIn, amountOut);
-        console.log(100 - Number(100000n * expectedPrice / actualPrice)/1000)
     
         return 100 - Number(100000n * expectedPrice / actualPrice)/1000
     }

@@ -44,7 +44,7 @@
 <div
 	{onmouseenter}
 	{onmouseleave}
-	class="allcenter !items-stretch flex-col {isError
+	class="allcenter z-20 !items-stretch flex-col {isError
 		? 'bg-[#ed32bf] text-white'
 		: 'bg-[#1a1a1a] text-[#8eeafc]'} p-4 mt-5 rounded-3xl w-[20rem]"
 >

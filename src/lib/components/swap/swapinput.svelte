@@ -2,7 +2,8 @@
 	import arrow from '$lib/images/common/arrow.svg';
 	import Tokenimg from '$lib/components/swap/tokenimg.svelte';
 	import type { TokenInfo } from '$lib/types';
-	import { shortenNumber } from '$lib/utils';
+	import { makeNumberReadable, shortenNumber } from '$lib/utils';
+	import { untrack } from 'svelte';
 	type Props = {
 		isInput: boolean;
 		openTokens: (isInput: boolean)=>void;
@@ -20,21 +21,21 @@
 	let text = $state("0")
 
 	$effect(() => {
-		const expected = value;
 		if (value === "0") {
 			text = "";
 			return
 		}
-		const txt = text.replace(/\.?0*$/, "");
-		if ((txt? txt:"0") !== expected) {
-			text = value;
+		const txt = untrack(()=>text).replace(/\.?0*$/, "");
+		if ((txt? txt:"0") !== value) {
+			text = shortenNumber(value);
 		}
 	})
 
-	function oninput(e: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
-		let newText = e.currentTarget.value;
-
+	function oninput() {
+		let newText = text;
+		
 		if (newText === ".") newText = "0.";
+		newText = newText.replace(/^0+(?=[1-9])/, "")
 		newText = newText.replaceAll(/[^0-9.]/g, "")
 		newText = newText.replaceAll(/(?<=\..*)\./g, "")
 		const decimals = newText.match(/\.\d+/g)
@@ -78,7 +79,7 @@
 			<img src={arrow} alt="choose token" class="w-[30px] h-[30px]" />
 		</button>
 		<span class="text-sm opacity-50 mt-1 pl-3">Balance: {
-			shortenNumber(tokenInfo?.amountOwned.toString() ?? "0")
+			makeNumberReadable(tokenInfo?.amountOwned.toString() ?? "0")
 		}</span>
 	</div>
 	<div class="flex flex-col items-end">
@@ -112,6 +113,12 @@
 		}
 		&:focus {
 			outline: none;
+		}
+	}
+
+	@media (max-width: 450px) {
+		input[type='text'] {
+			font-size: x-large;
 		}
 	}
 
