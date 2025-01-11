@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import doneSvg from '$lib/images/swap/done.svg';
 	import copySvg from '$lib/images/swap/copy.svg';
-	import externalSvg from '$lib/images/swap/externallink.svg';
+	import externalSvg from '$lib/images/common/externallink.svg';
 
 	let { isError, text, ttl, kill, link }: AlertType & { kill: () => void } = $props();
 	let clicked: boolean = $state(false);
@@ -64,7 +64,9 @@
 		</button>
 	</div>
 	<div>
-		<span class="font-base text-base opacity-70">{text}</span>
+		<span class="font-base text-base opacity-70 break-all">
+			{text}
+		</span>
 	</div>
 	<div class="relative my-3">
 		<div

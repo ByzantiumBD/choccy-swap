@@ -9,6 +9,7 @@
 	let { children } = $props();
 
 	let isSwap = $derived(page.url.pathname.match(/swap/i) !== null);
+	let isHome = $derived(page.url.pathname.match(/^\/$/) !== null);
 </script>
 
 <div class="overflow-hidden relative bg-black min-h-screen flex flex-col justify-between">
@@ -18,7 +19,7 @@
 		{@render children()}
 	</Background>
 
-	{#if !isSwap}
+	{#if isHome}
 		<Footer/>
 	{/if}
 </div>

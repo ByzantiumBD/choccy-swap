@@ -2,25 +2,22 @@
 	import logo from '$lib/images/common/logo.svg';
 	import writing from '$lib/images/common/writing.svg';
 	import menu from '$lib/images/common/menu.svg';
-	import type { Session } from '@chromia/ft4';
-	import { alerter, shortenId, updateBalances } from '$lib/utils';
+	import { alerter, updateBalances } from '$lib/utils';
 	import { mint } from '$lib/interactions/account';
-	import { getSessionOrConnect } from '$lib/interactions/connection';
+	import Walletconnector from '../swap/walletconnector.svelte';
+	import { getSession } from '$lib/interactions/connection';
+	import type { Session } from '@chromia/ft4';
 
 	let { isSwap } = $props();
 	let menuDiv: HTMLDivElement;
-	let session: Session | undefined = $state(undefined);
 
 	let text: string = $state('Get funds for testing');
+	let session: Session | undefined = $state(undefined);
 	let hideMinter = $state(false);
 
-	async function connect() {
-		session = await getSessionOrConnect();
-		updateBalances();
-	}
 	function getBalance() {
 		text = 'Receiving funds...';
-		mint(session!)
+		mint(getSession()!)
 			.then(() => {
 				text = 'Assets received!';
 				updateBalances();
@@ -56,32 +53,23 @@
 				<img src={logo} alt="logo" class="h-[50px]" />
 				<img src={writing} alt="choccyswap" class="h-[30px] px-3" />
 			</a>
-			<div class="max-[599px]:hidden allcenter ml-auto">
+			<div class="max-[779px]:hidden allcenter ml-auto">
+				<div id="links" class="allcenter ml-auto mr-5 space-x-8 font-medium">
+					<a href="/pools" class=""> Pools </a>
+				</div>
 				{#if isSwap}
-					{#if session}
-						{#if !hideMinter}
-							<button onclick={getBalance}>
-								{text}
-							</button>
-						{/if}
-						<div class="pinkbutton py-1.5 px-7 font-semibold ml-8">
-							{shortenId(session.account.id)}
-						</div>
-					{:else}
-						<button onclick={connect} class="pinkbutton py-1.5 px-7 font-semibold ml-8">
-							Connect Wallet
+					{#if session && !hideMinter}
+						<button class="mr-3" onclick={getBalance}>
+							{text}
 						</button>
 					{/if}
+					<Walletconnector bind:session={session} />
 				{:else}
-					<div id="links" class="allcenter ml-auto space-x-8 font-medium">
-						<a href="/" class=""> Stats </a>
-						<a href="/" class=""> Pools </a>
-					</div>
 					<a href="/swap" class="pinkbutton py-1.5 px-7 font-semibold ml-8"> Swap Now </a>
 				{/if}
 			</div>
 
-			<div class="min-[600px]:hidden ml-auto relative">
+			<div class="min-[780px]:hidden ml-auto relative">
 				<button onclick={toggleMenu}>
 					<img src={menu} alt="menu" class="text-white" />
 				</button>
@@ -89,26 +77,17 @@
 				<div
 					bind:this={menuDiv}
 					id="topbarmenu"
-					class="min-[600px]:!hidden absolute top-full right-0 p-3 gap-3 w-[500%]"
+					class="min-[780px]:!hidden absolute top-full right-0 p-3 gap-3 w-[500%]"
 				>
 					{#if isSwap}
-						{#if session}
-							{#if !hideMinter}
-								<button onclick={getBalance}>
-									{text}
-								</button>
-							{/if}
-							<div class="pinkbutton py-1.5 px-7 font-semibold">
-								{shortenId(session.account.id)}
-							</div>
-						{:else}
-							<button onclick={connect} class="pinkbutton py-1.5 px-7 font-semibold">
-								Connect Wallet
+						{#if session && !hideMinter}
+							<button onclick={getBalance}>
+								{text}
 							</button>
 						{/if}
+						<Walletconnector bind:session={session} />
 					{:else}
-						<a href="/" class=""> Stats </a>
-						<a href="/" class=""> Pools </a>
+						<a href="/pools" class=""> Pools </a>
 						<a href="/swap" class="pinkbutton py-1.5 px-7 font-semibold"> Swap Now </a>
 					{/if}
 				</div>
@@ -118,10 +97,6 @@
 </div>
 
 <style lang="less">
-	div.pinkbutton:hover {
-		border: 2.34px solid #b5178e !important;
-	}
-
 	.pinkbutton {
 		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
 		border-radius: 32px;
