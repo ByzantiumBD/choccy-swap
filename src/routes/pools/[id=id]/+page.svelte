@@ -17,7 +17,7 @@
 		Chart not yet available
 	</div>
 
-	<div class="flex flex-col grow basis-1 mx-2 items-stretch">
+	<div class="statsholder flex flex-col grow basis-1 mx-2 items-stretch">
 		<PoolStats {pairPromise} />
 		<a
 			href="/swap?input={id}"
@@ -43,5 +43,18 @@
 	.chart {
 		background-image: radial-gradient(#30303080, #1a1a1a80);
 		backdrop-filter: blur(15px);
+		margin-bottom: 1rem;
+	}
+	@media(max-width:960px) {
+		.first {
+			flex-direction: column;
+			& > .chart {
+				flex-basis: 200px;
+			}
+			& > .statsholder {
+				align-self: center;
+				min-width: 300px;
+			}
+		}
 	}
 </style>

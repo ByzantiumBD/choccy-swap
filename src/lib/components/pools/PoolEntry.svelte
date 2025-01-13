@@ -33,19 +33,19 @@
 	{onclick}
 	class="flex clickable poolentry mb-2 rounded-3xl items-center p-5 text-white text-xl w-full"
 >
-	<div class="identifier flex items-center basis-1 grow">
+	<div class="identifier flex items-center overflow-hidden text-ellipsis flex-[1_1_0.25rem]">
 		<Tokenimg class="mr-4 w-[45px] h-[45px]" src={pair.asset1.iconUrl} alt="logo" />
 		<div class="name flex">
-			<div class="mr-1">{pair.asset1.name}</div>
-			<div class="opacity-80">({pair.asset1.symbol})</div>
+			<div class="mr-1 shrink">{pair.asset1.name}</div>
+			<div class="opacity-80 shrink">({pair.asset1.symbol})</div>
 		</div>
 	</div>
-	<div class="money flex basis-1 grow items-center">
-		<button onclick={explore} class="flex grow basis-1 justify-center text-lg opacity-70">
+	<div class="money flex min-[801px]:basis-1 min-[801px]:grow items-center">
+		<button onclick={explore} class="max-[800px]:hidden flex grow basis-1 justify-center text-lg opacity-70">
 			<span> {shortenId(pair.asset1.id)} </span>
 			<img src={ext} class="ml-1 w-[18px]" alt="open in explorer" />
 		</button>
-		<div class="grow basis-1">
+		<div class="max-[630px]:hidden max-[800px]:mr-8 grow basis-1">
 			{makeNumberReadable(
 				createAmountFromBalance(pair.amountCcy * 2n, pair.ccy.decimals).toString()
 			)}
@@ -69,6 +69,15 @@
 		&:hover {
 			background-image: linear-gradient(to right, #ff02d188 0, #8eeafc88 100%);
 			border-color: #fff8;
+		}
+	}
+	.name {
+		flex: 1 1 auto;
+		justify-content: start;
+		& > div {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-align: left;
 		}
 	}
 </style>

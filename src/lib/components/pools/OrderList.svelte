@@ -128,7 +128,7 @@
 			? ''
 			: 'flex-row-reverse'} items-center justify-around opacity-50 text-lg py-2"
 	>
-		<span>Number of Orders</span>
+		<span class="O">Number of Orders</span>
 		<span>Volume</span>
 		<span>Price Range</span>
 	</div>
@@ -183,6 +183,17 @@
 			top: 0;
 			height: 100%;
 			content: '';
+		}
+	}
+
+	@media(max-width:460px) {
+		.title {
+			font-size: large !important;
+		}
+	}
+	@media(max-width:600px) {
+		.O {
+			display: none;
 		}
 	}
 </style>

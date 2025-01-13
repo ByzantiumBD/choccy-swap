@@ -14,7 +14,7 @@
 	}
 </script>
 
-<div class=" basis-1 grow flex items-center">
+<div class="max-[500px]:self-stretch max-[500px]:mt-2 basis-1 grow flex items-center">
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div {onclick} class="gradientborder allcenter px-5 py-2 space-x-auto mr-3 grow">

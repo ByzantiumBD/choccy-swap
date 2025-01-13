@@ -62,9 +62,9 @@
 	});
 </script>
 
-<div class="max-w-[1000px] h-screen w-full flex flex-col">
-	<div class="allcenter mx-5 mt-32 mb-8 !justify-between">
-		<h1 class="grow basis-1 text-5xl font-bold text-white">Pools</h1>
+<div class="max-w-[1000px] h-screen w-full px-5 flex flex-col">
+	<div class="allcenter mx-5 mt-32 mb-8 !justify-between max-[500px]:flex-col ">
+		<h1 class="max-[500px]:self-start grow basis-1 text-5xl font-bold text-white">Pools</h1>
 		<PoolSearchBar {filters} />
 	</div>
 
@@ -74,9 +74,9 @@
 			<span class="name mr-1">Name</span>
 			<span class="ticker">(Ticker)</span>
 		</div>
-		<div class="money flex basis-1 grow mr-[40px]">
-			<span class="address">Address</span>
-			<span class="tvl">TVL (CCY)</span>
+		<div class="money flex min-[801px]:basis-1 min-[801px]:grow mr-[40px]">
+			<span class="address max-[800px]:hidden">Address</span>
+			<span class="max-[630px]:hidden max-[800px]:mr-8 tvl">TVL&nbsp;(CCY)</span>
 			<span class="price">Price</span>
 		</div>
 	</div>
