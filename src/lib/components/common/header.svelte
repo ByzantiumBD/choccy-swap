@@ -79,6 +79,7 @@
 					id="topbarmenu"
 					class="min-[780px]:!hidden absolute top-full right-0 p-3 gap-3 w-[500%]"
 				>
+					<a href="/pools" class=""> Pools </a>
 					{#if isSwap}
 						{#if session && !hideMinter}
 							<button onclick={getBalance}>
@@ -87,7 +88,6 @@
 						{/if}
 						<Walletconnector bind:session={session} />
 					{:else}
-						<a href="/pools" class=""> Pools </a>
 						<a href="/swap" class="pinkbutton py-1.5 px-7 font-semibold"> Swap Now </a>
 					{/if}
 				</div>
@@ -97,6 +97,10 @@
 </div>
 
 <style lang="less">
+	.pinkbutton:hover {
+		border: 2.34px solid #b5178e !important;
+	}
+
 	.pinkbutton {
 		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
 		border-radius: 32px;
