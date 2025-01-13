@@ -5,13 +5,42 @@
    viewBox="0 0 69.292 69.292"
    version="1.1"
    id="svg1"
+   sodipodi:docname="logo_lp.svg"
+   inkscape:version="1.3.2 (1:1.3.2+202311252150+091e20ef0f)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="4.5095093"
+     inkscape:cx="130.94551"
+     inkscape:cy="130.94551"
+     inkscape:window-width="2560"
+     inkscape:window-height="1366"
+     inkscape:window-x="2560"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs1" />
   <g
      id="layer1"
      transform="translate(-8.5186701,-84.692246)">
+    <circle
+       style="fill:#9ceeff;stroke:#ed32bf;stroke-width:5.29167;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       id="circle1"
+       cx="43.164669"
+       cy="119.33825"
+       r="30" />
     <path
        id="path2"
        style="opacity:1;fill:#ff9ced;fill-opacity:1;stroke:none;stroke-width:2.64583;stroke-dasharray:none;stroke-opacity:1"
