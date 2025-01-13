@@ -54,7 +54,7 @@
 			}
 		}
 		const t = removeTrailingZeros(newText);
-		value = createAmount(t? t : "0", tokenInfo?.asset.decimals ?? 0);
+		value = createAmount(t? t : "0", tokenInfo?.asset.decimals ?? 18);
 		text = newText;
 	}
 
