@@ -20,14 +20,15 @@
 		value = $bindable(),
 	}: Props = $props();
 
-	let text = $state("0")
+	let text = $state("")
 
 	$effect(() => {
-		if (value.value === 0n) {
+		const currentText = untrack(()=>text);
+		if (value.value === 0n && !currentText.match(/^0?\.?0*$/)) {
 			text = "";
 			return
 		}
-		const txt = removeTrailingZeros(untrack(()=>text));
+		const txt = removeTrailingZeros(currentText);
 		if ((txt? txt:"0") !== value.toString()) {
 			text = shortenNumber(value.toString());
 		}
