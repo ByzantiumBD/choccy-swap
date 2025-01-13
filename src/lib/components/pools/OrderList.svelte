@@ -78,6 +78,10 @@
 			priceRange: (sell ? '+' : '-') + (idx + 1) * 10 + '%'
 		};
 
+		if (idx === 5) {
+			info.priceRange = (sell ? '>' : '<') + (idx) * 10 + '%';
+		}
+
 		let finished = false;
 
 		while (!finished) {
