@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Tokenimg from '$lib/components/swap/tokenimg.svelte';
 	import ext from '$lib/images/common/externallink.svg';
-	import { getReadablePrice, getReadableTvlCcy } from '$lib/number-utils';
+	import { getReadablePriceInCcy, getReadableTvlCcy } from '$lib/number-utils';
 	import type { Pair } from '$lib/types';
 	import { shortenId } from '$lib/utils';
 	import type { Asset } from '@chromia/ft4';
@@ -72,8 +72,8 @@
 
 		<span class="gradientbutton py-1 px-3 my-2 text-sm"> Price</span>
 		<span class="ml-3 text-3xl font-extrabold flex items-end">
-			<ReadablePrice {...getReadablePrice(pair)} fontSize={1.875} />
-			<span class="opacity-50 text-base ml-1">{pair.asset1.symbol}/CCY</span>
+			<ReadablePrice {...getReadablePriceInCcy(pair)} fontSize={1.875} />
+			<span class="opacity-50 text-base ml-1">CCY</span>
 		</span>
 
 		<div class="flex items-center">

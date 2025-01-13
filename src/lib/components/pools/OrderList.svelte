@@ -2,13 +2,15 @@
 	import { getConnection } from '$lib/interactions/connection';
 	import { getAllOrdersByPriceRange } from '$lib/interactions/queries';
 	import { calcPrice, PRICE_PRECISION } from '$lib/interactions/swaps';
+	import { shortenNumber } from '$lib/number-utils';
 	import type { Pair } from '$lib/types';
-	import { createAmountFromBalance, type Connection } from '@chromia/ft4';
+	import { createAmountFromBalance, type Amount, type Connection } from '@chromia/ft4';
 	import { onMount } from 'svelte';
 
 	type OrderInfo = {
 		number: string;
-		volume: string;
+		volume: Amount;
+		symbol: string;
 		priceRange: string;
 		width: number;
 	};
@@ -19,7 +21,7 @@
 	};
 
 	let { sell = false, pairPromise }: { sell?: boolean; pairPromise: Promise<Pair> } = $props();
-	
+
 	let order0: OrderInfo | undefined = $state(undefined);
 	let order1: OrderInfo | undefined = $state(undefined);
 	let order2: OrderInfo | undefined = $state(undefined);
@@ -27,12 +29,32 @@
 	let order4: OrderInfo | undefined = $state(undefined);
 	let order5: OrderInfo | undefined = $state(undefined);
 
-	let all: Array<OrderInfo|undefined> = $derived([order0, order1, order2, order3, order4, order5]);
+	let all: Array<OrderInfo | undefined> = $derived([
+		order0,
+		order1,
+		order2,
+		order3,
+		order4,
+		order5
+	]);
 
 	let connection: Connection | undefined = $state(undefined);
 
 	async function getOrders(pair: Pair) {
 		await Promise.all(all.map((_, i) => getOrdersInRange(pair, i)));
+		setOrderWidths();
+	}
+
+	function setOrderWidths() {
+		const tot = all.reduce<bigint>((tot: bigint, o: OrderInfo | undefined) => {
+			return tot + (o?.volume.value ?? 0n)
+		}, 0n)
+		if (tot === 0n) return;
+		all.forEach((o, i) => {
+			if (!o) return;
+			const width = 100 * Number(o.volume.value)/Number(tot)
+			updateOrderX(i, {...o, width});
+		})
 	}
 
 	async function getOrdersInRange(pair: Pair, idx: number) {
@@ -73,39 +95,37 @@
 
 			updateOrderX(idx, {
 				number: '' + info.number,
-				volume: createAmountFromBalance(
-					info.volume,
-					expected.decimals
-				).toString() + " " + expected.symbol,
+				volume: createAmountFromBalance(info.volume, expected.decimals),
+				symbol: " " + expected.symbol,
 				priceRange: info.priceRange,
 				width: 0
 			});
 		}
 	}
 
-	function updateOrderX(idx: number, x: OrderInfo){
+	function updateOrderX(idx: number, x: OrderInfo) {
 		switch (idx) {
 			case 0:
-				order0 = x
+				order0 = x;
 				break;
 			case 1:
-				order1 = x
+				order1 = x;
 				break;
 			case 2:
-				order2 = x
+				order2 = x;
 				break;
 			case 3:
-				order3 = x
+				order3 = x;
 				break;
 			case 4:
-				order4 = x
+				order4 = x;
 				break;
 			case 5:
-				order5 = x
+				order5 = x;
 				break;
-		
+
 			default:
-				throw "what"
+				throw 'what';
 		}
 	}
 
@@ -134,14 +154,15 @@
 	</div>
 	<hr class="border-gray-600 border-1" />
 	{#snippet section(order: OrderInfo | undefined)}
-		<div 
-			style="--width:{order?.width ?? 0};--color:{sell ? '#8eeafc88' : '#ed32bf88'};--right:{sell
+		<div
+			style="--width:{order?.width ?? 0}%;--color:{sell ? '#8eeafc88' : '#ed32bf88'};--right:{sell
 				? '0'
 				: ''};--left:{sell ? '' : '0'};"
-			class="orders {sell? '' : 'flex-row-reverse'} flex items-center justify-around text-lg py-4"
+			class="orders {sell ? '' : 'flex-row-reverse'} flex items-center justify-around text-lg py-4"
 		>
 			<span class="O"> {order?.number ?? '...'} </span>
-			<span class="V"> {order?.volume ?? '...'} </span>
+			<span class="V"> {order? 
+				(shortenNumber(order.volume.toString()) + order.symbol) : '...'} </span>
 			<span class="P"> {order?.priceRange ?? '...'} </span>
 		</div>
 	{/snippet}
@@ -174,6 +195,7 @@
 		--width: 50%;
 		position: relative;
 		&::before {
+			transition: all 0.25s ease;
 			z-index: -1;
 			position: absolute;
 			right: var(--right);
@@ -186,12 +208,12 @@
 		}
 	}
 
-	@media(max-width:460px) {
+	@media (max-width: 460px) {
 		.title {
 			font-size: large !important;
 		}
 	}
-	@media(max-width:600px) {
+	@media (max-width: 600px) {
 		.O {
 			display: none;
 		}

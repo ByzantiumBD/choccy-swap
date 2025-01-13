@@ -30,7 +30,7 @@
 
 <div class="second text-white flex flex-col items-stretch grow basis-1 self-stretch px-3">
 	<h1 class="font-bold allcenter text-4xl my-3">Orderbook</h1>
-	<div class="flex items-stretch bg-[#101010a0] rounded-3xl bgblur mb-5">
+	<div class="flex items-stretch bg-[#101010a0] rounded-3xl overflow-hidden bgblur mb-5">
 		<OrderList {pairPromise} sell />
 		<OrderList {pairPromise} />
 	</div>

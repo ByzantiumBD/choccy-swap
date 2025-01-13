@@ -51,12 +51,12 @@ export function removeTrailingZeros(number: string): string {
     return number.replace(/\.0*$/, "").replace(/(?<=\.\d+)0+$/, "")
 }
 
-export function getReadablePrice(pair: Pair): {val: string, numberOfDecimalZeros: number} {   
-    const decimalsDiff = pair.asset1.decimals - pair.ccy.decimals;
-    if (pair.amount1 === 0n || pair.amountCcy === 0n) {
+export function getReadablePriceInCcy(pair: Pair): {val: string, numberOfDecimalZeros: number} {   
+    const decimalsDiff = pair.ccy.decimals - pair.asset1.decimals;
+    if (pair.amountCcy === 0n || pair.amount1 === 0n) {
         return { val: "...", numberOfDecimalZeros: 0 }
     }
-    const price = (Number(pair.amount1) / Number(pair.amountCcy)) / (10**decimalsDiff)
+    const price = (Number(pair.amountCcy) / Number(pair.amount1)) / (10**decimalsDiff)
 
     if (price >= 0.01) {
         return { val: addPostfix(price), numberOfDecimalZeros: 0 }
@@ -76,6 +76,6 @@ export function getReadablePrice(pair: Pair): {val: string, numberOfDecimalZeros
 
 export function getReadableTvlCcy(pair: Pair) {   
     return makeNumberReadable(
-        createAmountFromBalance(pair.amountCcy, pair.ccy.decimals).toString()
+        createAmountFromBalance(pair.amountCcy * 2n, pair.ccy.decimals).toString()
     )
 }

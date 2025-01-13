@@ -2,11 +2,12 @@
 	import arrowhoriz from '$lib/images/common/arrowhoriz.svg';
 	import ext from '$lib/images/common/externallink.svg';
 	import type { Pair } from '$lib/types';
-	import { makeNumberReadable } from '$lib/number-utils';
+	import { getReadablePriceInCcy, makeNumberReadable } from '$lib/number-utils';
 	import { createAmountFromBalance } from '@chromia/ft4';
 	import Tokenimg from '../swap/tokenimg.svelte';
 	import { shortenId } from '$lib/utils';
 	import { goto } from '$app/navigation';
+	import ReadablePrice from '../common/readablePrice.svelte';
 
 	let { pair }: { pair: Pair } = $props();
 
@@ -51,7 +52,8 @@
 			)}
 		</div>
 		<div class="grow basis-1">
-			{'1.23$'}
+			<ReadablePrice fontSize={1.25} {...getReadablePriceInCcy(pair)} />
+			<span>CCY</span>
 		</div>
 	</div>
 	<div class="w-[40px] h-[40px]">
