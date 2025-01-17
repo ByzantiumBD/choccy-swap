@@ -1,6 +1,6 @@
 import { createAmountFromBalance } from "@chromia/ft4";
 import { ParsingError } from "./errors";
-import type { Pair } from "./types";
+import type { Pair, ReadablePriceType } from "./types";
 
 export function shortenNumber(number: string) {
     const integer = number.replace(/^0+(?=[1-9])/, "").match(/^\d+/)?.[0];
@@ -51,26 +51,36 @@ export function removeTrailingZeros(number: string): string {
     return number.replace(/\.0*$/, "").replace(/(?<=\.\d+)0+$/, "")
 }
 
-export function getReadablePriceInCcy(pair: Pair): {val: string, numberOfDecimalZeros: number} {   
-    const decimalsDiff = pair.ccy.decimals - pair.asset1.decimals;
-    if (pair.amountCcy === 0n || pair.amount1 === 0n) {
-        return { val: "...", numberOfDecimalZeros: 0 }
-    }
-    const price = (Number(pair.amountCcy) / Number(pair.amount1)) / (10**decimalsDiff)
+export function makeStringValueReadablePrice(_amount: string): ReadablePriceType {
+    const amount = (Number(_amount) / 100000)+""
+    const numberOfDecimalZeros = amount.toString().match(/(?<=^0\.)0+/)?.[0].length
 
-    if (price >= 0.01) {
-        return { val: addPostfix(price), numberOfDecimalZeros: 0 }
+    if (!numberOfDecimalZeros || numberOfDecimalZeros < 1) {
+        return { val: addPostfix(Number(amount)), numberOfDecimalZeros: 0 }
     } else {
-        const str = price.toString();
-        const numberOfDecimalZeros = str.match(/^(?<=0\.)0+/)?.[0].length
         if (numberOfDecimalZeros === undefined) {
-            throw new ParsingError("Could not parse: " + str)
+            throw new ParsingError("Could not parse: " + amount)
         }
         return {
-            val: str.replace(/^0.0+/, ""),
+            val: amount.replace(/^0.0+/, "").slice(0, 3),
             numberOfDecimalZeros
         }
     }
+}
+
+export function getReadablePriceInCcy(pair: Pair): {
+    val: string,
+    numberOfDecimalZeros: number
+} {   
+    return makeStringValueReadablePrice(getPriceInCcy(pair).toString());
+}
+
+export function getPriceInCcy(pair: Pair | undefined): number {
+    if (pair === undefined || pair.amountCcy === 0n || pair.amount1 === 0n) {
+        return 0
+    }
+    const decimalsDiff = pair.ccy.decimals - pair.asset1.decimals;
+    return (Number(pair.amountCcy) / Number(pair.amount1)) / (10**decimalsDiff)
 }
 
 

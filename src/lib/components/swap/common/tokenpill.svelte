@@ -1,17 +1,16 @@
 <script lang="ts">
 	import type { Asset } from '@chromia/ft4';
-	import Tokenimg from '$lib/components/swap/tokenimg.svelte';
-	import type { BufferId } from 'postchain-client';
+	import Tokenimg from '$lib/components/common/tokenimg.svelte';
 
 	interface Props {
 		asset: Asset;
-		selectToken: (a: BufferId) => void;
+		selectToken: (a: Asset) => void;
 	}
 
 	let { asset, selectToken }: Props = $props();
 
 	function onclick() {
-		selectToken(asset.id);
+		selectToken(asset);
 	}
 </script>
 

@@ -1,12 +1,15 @@
 <script lang="ts">
-	import Tokenimg from '$lib/components/swap/tokenimg.svelte';
-	import ext from '$lib/images/common/externallink.svg';
+	import Tokenimg from '$lib/components/common/tokenimg.svelte';
 	import { getReadablePriceInCcy, getReadableTvlCcy } from '$lib/number-utils';
 	import type { Pair } from '$lib/types';
-	import { shortenId } from '$lib/utils';
 	import type { Asset } from '@chromia/ft4';
-	import { onMount } from 'svelte';
 	import ReadablePrice from '../common/readablePrice.svelte';
+	import Linkid from '../common/linkid.svelte';
+	import { onMount } from 'svelte';
+	import { getPairInfo } from '$lib/interactions/swaps';
+
+	let loading: boolean = $state(true);
+	let updater: NodeJS.Timeout | undefined = $state(undefined);
 
 	const NULL_ID = Buffer.from(
 		'0000000000000000000000000000000000000000000000000000000000000000',
@@ -23,8 +26,8 @@
 		supply: 0n
 	};
 
-	let { pairPromise }: { pairPromise: Promise<Pair> } = $props();
-	let pair: Pair = $state({
+	let { id }: { id: string } = $props();
+	let p: Pair = $state({
 		asset1: NULL_ASSET,
 		amount1: 0n,
 		amountCcy: 0n,
@@ -34,45 +37,47 @@
 		lpToken: NULL_ASSET
 	} as Pair);
 
+	async function updatePair() {
+		loading = true;
+		p = await getPairInfo(id)
+		loading = false;
+		if (p.id.compare(NULL_ID) === 0) {
+			updater = setTimeout(updatePair, 2000);
+		} else {
+			updater = setTimeout(updatePair, 20000);
+		}
+	}
+
 	onMount(() => {
-		pairPromise.then((p) => {
-			pair = p;
-		});
+		updatePair();
+		return () => clearTimeout(updater);
 	});
 </script>
 
-<div class="pool_infos bg-[#101010a0] rounded-3xl pb-3">
+<div class="pool_infos bg-[#101010a0] rounded-3xl pb-3 {loading? "text-[#fff8]":""}">
 	<div class="bg-[#0008] self-stretch text-2xl font-bold rounded-t-3xl px-5 py-4">Stats</div>
 	<div class="flex items-center p-3 ml-2">
-		<Tokenimg class="w-[40px] h-[40px] mr-2" src={pair.asset1.iconUrl} alt="" />
-		<span class="font-bold text-2xl mr-auto">{pair.asset1.name}</span>
-		<span class="text-lg opacity-50 mr-4">({pair.asset1.symbol})</span>
+		<Tokenimg class="w-[40px] h-[40px] mr-2" src={p.asset1.iconUrl} alt="" />
+		<span class="font-bold text-2xl mr-auto">{p.asset1.name}</span>
+		<span class="text-lg opacity-50 mr-4">({p.asset1.symbol})</span>
 	</div>
 
 	<hr class="border-1 border-gray-600 mx-3" />
 
 	<div class="flex flex-col items-start justify-center p-3 ml-4">
 		<span class="gradientbutton py-1 px-3 my-2 text-sm"> Address</span>
-		<a
-			class="ml-3 opacity-50 text-xl flex"
-			href="https://explorer.chromia.com/testnet/FA289E086E3D6C3277336E270BADDF75035C1F049F242AB2CF61773D2822213D/asset/{pair.asset1.id.toString(
-				'hex'
-			)}"
-			target="_blank"
-		>
-			{shortenId(pair.asset1.id)}
-			<img src={ext} class="ml-1 w-[20px]" alt="open in explorer" />
-		</a>
+		<Linkid id={p.asset1.id} buttonOrLinkClass="ml-3 text-xl"
+				imgClass="w-[20px]"/>
 
 		<span class="gradientbutton py-1 px-3 my-2 text-sm"> TVL</span>
 		<span class="ml-3 text-3xl font-extrabold flex items-end">
-			{getReadableTvlCcy(pair)}
+			{getReadableTvlCcy(p)}
 			<span class="opacity-50 text-base ml-1">CCY</span>
 		</span>
 
 		<span class="gradientbutton py-1 px-3 my-2 text-sm"> Price</span>
 		<span class="ml-3 text-3xl font-extrabold flex items-end">
-			<ReadablePrice {...getReadablePriceInCcy(pair)} fontSize={1.875} />
+			<ReadablePrice {...getReadablePriceInCcy(p)} fontSize={1.875} />
 			<span class="opacity-50 text-base ml-1">CCY</span>
 		</span>
 
@@ -81,16 +86,8 @@
 			<img class="w-[27px] h-[27px] ml-2" src="https://www.choccyswap.com/logo_lp.svg" alt="lp token"/>
 		</div>
 		
-		<a
-			class="ml-3 opacity-50 text-xl flex"
-			href="https://explorer.chromia.com/testnet/FA289E086E3D6C3277336E270BADDF75035C1F049F242AB2CF61773D2822213D/asset/{pair.lpToken.id.toString(
-				'hex'
-			)}"
-			target="_blank"
-		>
-			{shortenId(pair.lpToken.id)}
-			<img src={ext} class="ml-1 w-[20px]" alt="open in explorer" />
-		</a>
+		<Linkid id={p.lpToken.id} buttonOrLinkClass="ml-3 text-xl"
+				imgClass="w-[20px]"/>
 	</div>
 </div>
 

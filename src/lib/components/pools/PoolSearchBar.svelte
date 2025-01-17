@@ -1,31 +1,36 @@
 <script lang="ts">
 	import searchSvg from '$lib/images/swap/search.svg';
 	import Filter from '$lib/images/swap/filter.svelte';
-	type Props = {
-		filters: { verified: boolean, query: string }
-	};
-
-	let { filters = $bindable() }: Props = $props();
+	import { poolsData } from '$lib/states/pools/pool-states.svelte';
+	import { onMount } from 'svelte';
 
 	let input: HTMLInputElement | undefined = $state(undefined);
 
 	function onclick() {
 		if (input) input.focus()
 	}
+
+	function oninput(e: Event & { currentTarget: HTMLInputElement }) {
+		poolsData.query = e.currentTarget.value.toLowerCase();
+	}
+
+	onMount(() => {
+		if (poolsData.query && input) input.value = poolsData.query
+	})
 </script>
 
 <div class="max-[500px]:self-stretch max-[500px]:mt-2 basis-1 grow flex items-center">
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div {onclick} class="gradientborder allcenter px-5 py-2 space-x-auto mr-3 grow">
-		<input bind:this={input} bind:value={filters.query} placeholder="Search a token" />
+		<input bind:this={input} {oninput} placeholder="Search a token" />
 		<img class="w-[30px] h-[30px]" src={searchSvg} alt="search" />
 	</div>
 	<button
-		class="{filters.verified
+		class="{poolsData.showVerifiedOnly
 			? 'pink'
 			: 'black'} text-sm allcenter p-[0.08rem_0_0_0.08rem] relative rounded-full w-[35px] h-[35px]"
-		onclick={() => (filters.verified = !filters.verified)}
+		onclick={() => (poolsData.showVerifiedOnly = !poolsData.showVerifiedOnly)}
 	>
 		<Filter />
 	</button>

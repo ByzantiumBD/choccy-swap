@@ -3,14 +3,20 @@
 	import { onMount } from 'svelte';
 	import Tokenpill from './tokenpill.svelte';
 	import Tokenentry from './tokenentry.svelte';
-	import { getFavoriteAssets, searchAssets, getCcy } from '$lib/interactions/utils';
-	import { getConnection } from '$lib/interactions/connection';
+	import { getFavoriteAssets, searchAssets, getCcy, getTokenInfo } from '$lib/interactions/utils';
 	import type { Asset, Connection } from '@chromia/ft4';
 	import Searchbox from './searchbox.svelte';
 	import type { Paginator, Pair } from '$lib/types';
 	import { filterAssets, getAssetFilter } from '$lib/utils';
+	import { connectionState } from '$lib/states/shared/connection-state.svelte';
+	import { updateInputs } from '$lib/states/swap/swap-state-interactions.svelte';
+	type Props = {
+		close: () => void,
+		isHidden: boolean,
+		isInput: boolean,
+	}
 
-	let { close, isHidden, selectToken } = $props();
+	let { close, isHidden, isInput }: Props = $props();
 
 	let connection: Connection | undefined = $state(undefined);
 
@@ -36,13 +42,19 @@
 
 	$effect(() => {
 		if (connection) {
-			searchAssets(connection, search).then((x) => (allAssetPaginators = x));
+			searchAssets(search).then((x) => (allAssetPaginators = x));
 		}
 	});
 
 	$effect(() => {
 		if (!isHidden) focusSearch();
 	});
+
+	async function selectToken(asset: Asset) {
+		const tk = await getTokenInfo(asset);
+		close();
+		await updateInputs(isInput, tk);
+	}
 
 	onMount(async () => {
 		const buttons = [name, symbol, id];
@@ -55,9 +67,9 @@
 			});
 		});
 
-		connection = await getConnection();
+		connection = connectionState.connection;
 		ccy = await getCcy();
-		pillAssets = await getFavoriteAssets(connection);
+		pillAssets = await getFavoriteAssets(connectionState.connection!);
 	});
 
 	function getCorrectAssets(paginators: typeof allAssetPaginators, filtered: boolean) {
@@ -131,9 +143,5 @@
 			color: #fff;
 			border-bottom: solid #ed32bf 3px;
 		}
-	}
-
-	#pillscroll {
-		transition: all 0.25s ease-in-out;
 	}
 </style>

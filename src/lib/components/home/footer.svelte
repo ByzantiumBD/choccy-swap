@@ -11,16 +11,16 @@
         <span class="c ctopright"></span>
         <span class="c ctopleft"></span>
         <div id="socials" class="allcenter space-x-8 h-[6cm]">
-            <a href="https://x.com/ChoccySwap" target="_blank">
+            <a href="https://x.com/ChoccySwap" target="_blank" class="clickable">
                 <img src={X} alt="X twitter" />
             </a>
-            <a href="https://t.me/ChoccySwapCommunity" target="_blank">
+            <a href="https://t.me/ChoccySwapCommunity" target="_blank" class="clickable">
                 <img src={telegram} alt="telegram" />
             </a>
-            <a href="https://discord.com/invite/cunRKsgbBz" target="_blank">
+            <a href="https://discord.com/invite/cunRKsgbBz" target="_blank" class="clickable">
                 <img src={discord} alt="discord" />
             </a>
-            <a href="https://www.coingecko.com/en/coins/choccyswap" target="_blank">
+            <a href="https://www.coingecko.com/en/coins/choccyswap" target="_blank" class="clickable">
                 <img src={coingecko} alt="coingecko" />
             </a>
         </div>

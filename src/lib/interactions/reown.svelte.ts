@@ -8,10 +8,10 @@ import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 import type { Eip1193Provider } from 'ethers';
 import { connectWithEvmAccount, disconnect } from './connection';
 import { WalletError } from '$lib/errors';
-import { updateBalances } from '$lib/utils';
+import { connectionState } from '$lib/states/shared/connection-state.svelte';
 
 // Get projectId from https://cloud.reown.com
-const projectId = "bd9f15cbf71849a70415487e71be2bf9";
+const projectId = 'bd9f15cbf71849a70415487e71be2bf9';
 
 // Configure the metadata
 const metadata = {
@@ -32,57 +32,43 @@ export const modal = createAppKit({
 	}
 });
 
-let account: UseAppKitAccountReturn | undefined = undefined;
-let provider: Eip1193Provider | undefined = undefined;
-const updaters: Array<() => void> = [];
-
-modal.subscribeProviders((state) => (provider = state['eip155'] as Eip1193Provider));
+modal.subscribeProviders((state) => {
+	connectionState.provider = state['eip155'] as Eip1193Provider;
+});
 modal.subscribeAccount(switchAccount);
 modal.subscribeState(updateState);
 
 async function signMessage(msg: string) {
-	if (provider && account?.address) {
-		return (await provider.request({
+	if (connectionState.provider && connectionState.account?.address) {
+		return (await connectionState.provider.request({
 			method: 'personal_sign',
-			params: [msg, account.address]
+			params: [msg, connectionState.account.address]
 		})) as string;
 	} else {
 		throw new WalletError('Please connect before signing a message.');
 	}
 }
-function updateUI() {
-	updaters.forEach((updater) => updater());
-	updateBalances();
-}
 
 function switchAccount(newState: UseAppKitAccountReturn) {
-	account = newState;
-	if (account.address && provider) {
-		connectWithEvmAccount(account.address, signMessage).then(() => {
-			updateBalances();
-			updateUI();
-		});
+	connectionState.account = newState;
+	if (newState.address && connectionState.provider) {
+		connectWithEvmAccount(newState.address, signMessage);
 	} else {
 		disconnect();
 	}
 }
-function updateState(newState: PublicStateControllerState) {
-  if (
-    newState.initialized &&
-    modal.getIsConnectedState() &&
-    account?.address &&
-    !newState.loading
-  ) {
-    connectWithEvmAccount(account.address, signMessage).then(() => updateUI());
+async function updateState(newState: PublicStateControllerState) {
+	if (
+		newState.initialized &&
+		modal.getIsConnectedState() &&
+		connectionState.account?.address &&
+		!newState.loading
+	) {
+		await connectWithEvmAccount(connectionState.account.address, signMessage)
 	}
 }
 
-export function subscribeToModal(updater: () => void) {
-  updaters.push(updater);
-}
-
 export async function disconnectModal() {
-  await modal.disconnect();
-  disconnect();
-  updateUI();
+	await modal.disconnect();
+	disconnect();
 }

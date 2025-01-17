@@ -40,17 +40,7 @@ export function isCcy(asset: Asset) {
     return getId(asset.id) === CCY_ID;
 }
 
-export function shortenId(id: Buffer) {
+export function shortenId(id: BufferId) {
     const str = id.toString('hex');
     return str.slice(0, 4) + '...' + str.slice(-4);
 }
-
-//================== ALERT UTILS =============================
-
-export let alerter: (e:Error) => void = (e:Error) => {throw e}
-
-export function setAlerter(a: (e: Error) => void) { alerter = a }
-
-export let updateBalances = () => {}
-
-export function setUpdater(a: () => void) { updateBalances = a }

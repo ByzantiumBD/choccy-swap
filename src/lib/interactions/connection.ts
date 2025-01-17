@@ -1,21 +1,17 @@
 // import type { ChainStats } from "$lib/types";
 import { MissingAccountError, OfflineError, TooManyAccountsError } from '$lib/errors';
+import { connectionState } from '$lib/states/shared/connection-state.svelte';
+import { refreshData } from '$lib/states/swap/swap-state-interactions.svelte';
 import { getId } from '$lib/utils';
 import {
 	createConnection,
-	type Connection,
-	type Session,
 	createGenericEvmKeyStore,
 	createKeyStoreInteractor
 } from '@chromia/ft4';
 import { createClient, encryption, TxRejectedError } from 'postchain-client';
 
-let connection: Connection | undefined;
-let session: Session | undefined;
-// let chainStats: ChainStats | undefined;
-
-export async function getConnection(): Promise<Connection> {
-	if (connection === undefined) {
+export async function connect() {
+	if (!connectionState.connection) {
 		const client = await createClient({
 			directoryNodeUrlPool: [
 				'https://node0.testnet.chromia.com:7740',
@@ -26,10 +22,10 @@ export async function getConnection(): Promise<Connection> {
 			blockchainRid: 'fa289e086e3d6c3277336e270baddf75035c1f049f242ab2cf61773d2822213d'
 		});
 
-		connection = createConnection(client);
+		connectionState.connection = createConnection(client);
 		// chainStats = await client.query("get_chain_stats") as ChainStats;
+		connectionState.loading = false;
 	}
-	return connection;
 }
 
 export async function connectWithEvmAccount(
@@ -37,14 +33,16 @@ export async function connectWithEvmAccount(
 	signMessage: (msg: string) => Promise<string>
 ) {
 	if (
-		session &&
+		connectionState.session &&
 		(
-			getId(session.account.id) ===
+			getId(connectionState.session.account.id) ===
 			address.toLowerCase().replace("0x", "")
 		)
-	) return session;
+	) return connectionState.session;
 
-	const connection = await getConnection();
+	connectionState.loading = true;
+
+	const connection = connectionState.connection;
 
 	if (connection === undefined) {
 		throw new OfflineError(
@@ -81,17 +79,17 @@ export async function connectWithEvmAccount(
 		}
 	}
 	if (accs.length === 1) {
-		session = await getSession(accs[0].id);
+		connectionState.session = await getSession(accs[0].id);
 	} else {
 		throw new TooManyAccountsError('Too many accounts found. Please contact us on Telegram.');
 	}
-	return session;
+
+	await refreshData()
+	connectionState.loading = false;
+	return connectionState.session;
 }
 
-export function getSession() {
-	return session;
-}
 
 export function disconnect() {
-	session = undefined;
+	connectionState.session = undefined;
 }

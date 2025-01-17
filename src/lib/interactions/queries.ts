@@ -3,16 +3,17 @@ import { getCcy, handlePagination } from "./utils";
 import { mapOrder, mapPair } from "$lib/mappers";
 import type { Order, OrderResponse, Paginator, Pair, PairResponse } from "$lib/types";
 import type { Asset } from "@chromia/ft4";
+import { connectionState } from "$lib/states/shared/connection-state.svelte";
 
 export const ALL_PAIRS_QUERY_NAME = "get_all_pairs_by_liquidity";
 export const ALL_ORDERS_QUERY_NAME = "get_orders_by_price_range";
 
 export async function getAllPairsByLiquidity(
     ccy: Asset,
-    queryable: Queryable,
     name: string = "",
     symbol: string = "",
-    id: BufferId = ""
+    id: BufferId = "",
+    queryable: Queryable = connectionState.connection!,
 ): Promise<Paginator<Pair>> {
     return handlePagination<Pair, PairResponse>(
         queryable,
@@ -23,10 +24,10 @@ export async function getAllPairsByLiquidity(
 }
 
 export async function getAllOrdersByPriceRange(
-    queryable: Queryable,
     asset: Asset,
     priceMin: bigint,
     priceMax: bigint,
+    queryable: Queryable = connectionState.connection!,
 ): Promise<Paginator<Order>> {
     const ccy = await getCcy();
     return handlePagination<Order, OrderResponse>(

@@ -2,47 +2,20 @@
 	import logo from '$lib/images/common/logo.svg';
 	import writing from '$lib/images/common/writing.svg';
 	import menu from '$lib/images/common/menu.svg';
-	import { alerter, updateBalances } from '$lib/utils';
-	import { mint } from '$lib/interactions/account';
-	import Walletconnector from '../swap/walletconnector.svelte';
-	import { getSession } from '$lib/interactions/connection';
-	import type { Session } from '@chromia/ft4';
+	import Walletconnector from '../swap/common/walletconnector.svelte';
+	import Animatedarrow from '../swap/pro/animatedarrow.svelte';
+	import { isProMode } from '$lib/states/swap/swap-states.svelte';
 
 	let { isSwap } = $props();
 	let menuDiv: HTMLDivElement;
 
-	let text: string = $state('Get funds for testing');
-	let session: Session | undefined = $state(undefined);
-	let hideMinter = $state(false);
-
-	function getBalance() {
-		text = 'Receiving funds...';
-		mint(getSession()!)
-			.then(() => {
-				text = 'Assets received!';
-				updateBalances();
-				new Promise<void>((resolve) => {
-					setTimeout(() => {
-						hideMinter = true;
-						resolve();
-					}, 3000);
-				});
-			})
-			.catch((e) => {
-				text = 'Error!';
-				new Promise<void>((resolve) => {
-					setTimeout(() => {
-						text = 'Get funds for testing';
-						resolve();
-					}, 3000);
-				});
-				alerter(e);
-			});
-	}
-
 	function toggleMenu() {
 		if (menuDiv.classList.contains('open')) menuDiv.classList.remove('open');
 		else menuDiv.classList.add('open');
+	}
+
+	function changeProMode() {
+		isProMode.value = !isProMode.value;
 	}
 </script>
 
@@ -54,18 +27,17 @@
 				<img src={writing} alt="choccyswap" class="h-[30px] px-3" />
 			</a>
 			<div class="max-[779px]:hidden allcenter ml-auto">
-				<div id="links" class="allcenter ml-auto mr-5 space-x-8 font-medium">
+				<div id="links" class="allcenter ml-auto mr-8 space-x-8 font-medium">
 					<a href="/pools" class=""> Pools </a>
 				</div>
 				{#if isSwap}
-					{#if session && !hideMinter}
-						<button class="mr-3" onclick={getBalance}>
-							{text}
-						</button>
-					{/if}
-					<Walletconnector bind:session={session} />
+					<button onclick={changeProMode} class="{isProMode.value? "clicked":""} promode mr-5 clickable font-semibold">
+						PRO Mode
+						<Animatedarrow isClicked={isProMode.value}/>
+					</button>
+					<Walletconnector />
 				{:else}
-					<a href="/swap" class="pinkbutton py-1.5 px-7 font-semibold ml-8"> Swap Now </a>
+					<a href="/swap" class="clickable pinkbutton py-1.5 px-7 font-semibold "> Swap Now </a>
 				{/if}
 			</div>
 
@@ -81,12 +53,11 @@
 				>
 					<a href="/pools" class=""> Pools </a>
 					{#if isSwap}
-						{#if session && !hideMinter}
-							<button onclick={getBalance}>
-								{text}
-							</button>
-						{/if}
-						<Walletconnector bind:session={session} />
+						<button onclick={changeProMode} class="{isProMode.value? "clicked":""} promode clickable font-semibold">
+							PRO Mode
+							<Animatedarrow isClicked={isProMode.value}/>
+						</button>
+						<Walletconnector />
 					{:else}
 						<a href="/swap" class="pinkbutton py-1.5 px-7 font-semibold"> Swap Now </a>
 					{/if}
@@ -142,5 +113,15 @@
 
 	:global(body) {
 		font-family: Roboto, sans-serif;
+	}
+
+	.promode {
+		border-radius: 32px;
+		border: 2.34px solid #ed32bf;
+		padding: 0.375rem 1.5rem;
+		display: flex;
+		&.clicked {
+			padding: 0.375rem 1.25rem;
+		}
 	}
 </style>

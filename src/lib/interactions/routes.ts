@@ -1,36 +1,34 @@
 import type { Pair } from '$lib/types';
 import { createAmountFromBalance, op, type Amount } from '@chromia/ft4';
 import { calcInputIncludingOrders, calcOutputIncludingOrders } from './swaps';
-import type { Queryable } from 'postchain-client';
 import { OfflineError, SwapError } from '$lib/errors';
+import { connectionState } from '$lib/states/shared/connection-state.svelte';
 
 export async function calcOutput(
-	queryable: Queryable | undefined,
 	input: Amount,
 	fromCcy: boolean,
 	pair1: Pair | undefined,
 	pair2: Pair | undefined
 ) {
-	if (!queryable) {
+	if (!connectionState.connection) {
 		throw new OfflineError('Connection lost. Please reload the page.');
 	}
 	if (pair1 === undefined) {
 		return createAmountFromBalance(0n, 0);
 	}
 
-	const intermediateOutput = await calcOutputIncludingOrders(queryable, pair1, input, !fromCcy);
+	const intermediateOutput = await calcOutputIncludingOrders(pair1, input, !fromCcy);
 	const decimals = fromCcy ? pair1.asset1.decimals : pair1.ccy.decimals;
 	const intermAmount = createAmountFromBalance(intermediateOutput, decimals);
 	if (pair2 === undefined) {
 		return intermAmount;
 	} else {
 		if (fromCcy) throw new SwapError('Cannot use two pools when starting from CCY');
-		const endVal = await calcOutputIncludingOrders(queryable, pair2, intermAmount, false);
+		const endVal = await calcOutputIncludingOrders(pair2, intermAmount, false);
 		return createAmountFromBalance(endVal, pair2.asset1.decimals);
 	}
 }
 export async function calcInput(
-	queryable: Queryable,
 	output: Amount,
 	fromCcy: boolean,
 	pair1: Pair | undefined,
@@ -41,15 +39,14 @@ export async function calcInput(
 	}
 
 	if (pair2 === undefined) {
-		const endVal = await calcInputIncludingOrders(queryable, pair1, output, !fromCcy);
+		const endVal = await calcInputIncludingOrders(pair1, output, !fromCcy);
 		const decimals = fromCcy ? pair1.ccy.decimals : pair1.asset1.decimals;
 		return createAmountFromBalance(endVal, decimals);
 	} else {
 		if (fromCcy) throw new SwapError('Cannot use two pools when starting from CCY');
 
-		const intermediateOutput = await calcInputIncludingOrders(queryable, pair2, output, false);
+		const intermediateOutput = await calcInputIncludingOrders(pair2, output, false);
 		const endVal = await calcInputIncludingOrders(
-			queryable,
 			pair1,
 			createAmountFromBalance(intermediateOutput, pair1.ccy.decimals),
 			true

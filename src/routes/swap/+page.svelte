@@ -1,8 +1,11 @@
 <script lang="ts">
-	import Alert from '$lib/components/swap/alerts.svelte';
+	import Alert from '$lib/components/swap/common/alerts.svelte';
 	import SwapBox from '$lib/sections/Swap/SwapBox.svelte';
+	import ProMode from '$lib/sections/Swap/ProMode.svelte'
 	import type { AlertType } from '$lib/types';
 	import { onMount } from 'svelte';
+	import { isProMode } from '$lib/states/swap/swap-states.svelte';
+	import { loadQueryParams } from '$lib/states/swap/swap-state-interactions.svelte';
 
 	let alerts: AlertType[] = $state([]);
 	let lastAlertId = 0;
@@ -28,12 +31,19 @@
 			const message = e.reason ?? e;
 			createAlert(true, message)
 		});
+		await loadQueryParams();
 	});
 </script>
 
-<SwapBox {success}/>
+{#if isProMode.value}
+	abc!
+	<ProMode />
+{:else}
+	<SwapBox {success}/>
+{/if}
 <div class="absolute left-0 bottom-0 bg-transparent flex flex-col-reverse p-4">
 	{#each alerts as a (a.id)}
 		<Alert {...a} kill={() => killAlert(a.id)} />
 	{/each}
 </div>
+

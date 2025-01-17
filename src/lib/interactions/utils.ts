@@ -7,20 +7,19 @@ import {
 	type OptionalLimit,
 	retrievePaginatedEntity,
 	createAmount,
-	type Session
 } from '@chromia/ft4';
 import type { DictPair, Queryable, QueryObject, RawGtv } from 'postchain-client';
 import { getAllPairsByLiquidity } from './queries';
 import { ASSET_IDS, CCY_ID, isCcy } from '$lib/utils';
-import { getConnection } from './connection';
-import { OfflineError, SwapError } from '$lib/errors';
+import { SwapError } from '$lib/errors';
 import { getPairInfo } from './swaps';
+import { connectionState } from '$lib/states/shared/connection-state.svelte';
 
 let ccy: Asset | undefined = undefined;
 
 export async function getCcy(): Promise<Asset> {
 	if (!ccy) {
-		ccy = (await (await getConnection()).getAssetById(CCY_ID)) as Asset;
+		ccy = (await connectionState.connection!.getAssetById(CCY_ID)) as Asset;
 	}
 	return ccy;
 }
@@ -87,17 +86,17 @@ export async function handlePagination<ReturnType, Response extends RawGtv>(
 	}
 }
 
-export async function searchAssets(queryable: Queryable, query: string) {
+export async function searchAssets(query: string) {
 	const ccy = await getCcy();
 	const idQuery =
 		query.match(/^[0-9a-f]{0,64}$/i) === null
 			? null
 			: query.slice(0, query.length % 2 ? -1 : undefined);
 
-	const namePaginator = await getAllPairsByLiquidity(ccy, queryable, query);
-	const symbolPaginator = await getAllPairsByLiquidity(ccy, queryable, '', query);
+	const namePaginator = await getAllPairsByLiquidity(ccy, query);
+	const symbolPaginator = await getAllPairsByLiquidity(ccy, '', query);
 	const idPaginator =
-		idQuery !== null ? await getAllPairsByLiquidity(ccy, queryable, '', '', idQuery) : undefined;
+		idQuery !== null ? await getAllPairsByLiquidity(ccy, '', '', idQuery) : undefined;
 
 	return {
 		byName: namePaginator,
@@ -106,8 +105,8 @@ export async function searchAssets(queryable: Queryable, query: string) {
 	};
 }
 
-export async function getTokenInfo(session: Session | undefined, asset: Asset): Promise<TokenInfo> {
-	const bal = await session?.account.getBalanceByAssetId(asset.id);
+export async function getTokenInfo(asset: Asset): Promise<TokenInfo> {
+	const bal = await connectionState.session?.account.getBalanceByAssetId(asset.id);
 	return {
 		asset,
 		amountOwned: bal?.amount ?? createAmount(0, asset.decimals)
@@ -128,7 +127,6 @@ export function sequentialize<T>(paginator: Paginator<T>) {
 }
 
 export async function getPairs(
-	connection: Connection | undefined,
 	fromAsset: Asset | undefined,
 	toAsset: Asset | undefined
 ) {
@@ -139,12 +137,11 @@ export async function getPairs(
 	const toCcy = isCcy(toAsset);
 
 	if (fromCcy && toCcy) throw new SwapError('Cannot swap from CCY to CCY');
-	if (!connection) throw new OfflineError('Connection lost. Please reload the page.');
 
 	const pair1 = await (fromCcy
-		? getPairInfo(connection, toAsset.id)
-		: getPairInfo(connection, fromAsset.id));
-	const pair2 = await (fromCcy || toCcy ? undefined : getPairInfo(connection, toAsset.id));
+		? getPairInfo(toAsset.id)
+		: getPairInfo(fromAsset.id));
+	const pair2 = await (fromCcy || toCcy ? undefined : getPairInfo(toAsset.id));
 
 	return { pair1, pair2 };
 }

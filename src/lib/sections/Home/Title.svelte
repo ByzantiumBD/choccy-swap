@@ -12,8 +12,8 @@
 		rewards, and rich opportunities for financial growth
 	</span>
 	<div class="allcenter py-10 space-x-6">
-		<a href="/swap" id="swapbutton" class="py-1.5 px-7 font-semibold"> Swap Now </a>
-		<a href="/pools" id="visitpools" class="py-1.5 px-7 font-semibold"> Visit Pools </a>
+		<a href="/swap" id="swapbutton" class="clickable py-1.5 px-7 font-semibold"> Swap Now </a>
+		<a href="/pools" id="visitpools" class="clickable py-1.5 px-7 font-semibold"> Visit Pools </a>
 	</div>
 </div>
 

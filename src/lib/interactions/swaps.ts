@@ -2,9 +2,10 @@ import { NotEnoughLiquidityError, SwapError } from '$lib/errors';
 import { mapPair } from '$lib/mappers';
 import type { Order, Pair, PairResponse } from '$lib/types';
 import { type Amount, type BufferId } from '@chromia/ft4';
-import { formatter, type Queryable } from 'postchain-client';
+import { formatter } from 'postchain-client';
 import { getCcy, sequentialize } from './utils';
 import { getAllOrdersByPriceRange } from './queries';
+import { connectionState } from '$lib/states/shared/connection-state.svelte';
 
 export const PRICE_PRECISION: bigint = 2n ** 256n - 1n;
 const SWAP_PERTHOU: bigint = 3n;
@@ -103,10 +104,10 @@ function calcPriceAfterOutput(amount1: bigint, amountCcy: bigint, output: bigint
 	return calcPrice(one, two);
 }
 
-export async function getPairInfo(queryable: Queryable, assetId: BufferId) {
+export async function getPairInfo(assetId: BufferId) {
 	const ccy = await getCcy();
 	return mapPair(
-		await queryable.query<PairResponse, { asset: Buffer }>({
+		await connectionState.connection!.query<PairResponse, { asset: Buffer }>({
 			name: 'get_pair_info',
 			args: { asset: formatter.ensureBuffer(assetId) }
 		}),
@@ -130,7 +131,6 @@ function calcSwapAmountToPriceWithFees(
 }
 
 export async function calcOutputIncludingOrders(
-	queryable: Queryable,
 	pair: Pair,
 	amount: Amount,
 	buyCcy: boolean
@@ -155,7 +155,6 @@ export async function calcOutputIncludingOrders(
 	);
 
 	const orderPaginator = await getAllOrdersByPriceRange(
-		queryable,
 		pair.asset1,
 		buyCcy ? currPrice : theoreticalEndPrice,
 		buyCcy ? theoreticalEndPrice : currPrice
@@ -213,7 +212,6 @@ export async function calcOutputIncludingOrders(
 }
 
 export async function calcInputIncludingOrders(
-	queryable: Queryable,
 	pair: Pair,
 	output: Amount,
 	buyCcy: boolean
@@ -246,7 +244,6 @@ export async function calcInputIncludingOrders(
     }
 
 	const orderPaginator = await getAllOrdersByPriceRange(
-		queryable,
 		pair.asset1,
 		buyCcy ? currPrice : theoreticalEndPrice,
 		buyCcy ? theoreticalEndPrice : currPrice

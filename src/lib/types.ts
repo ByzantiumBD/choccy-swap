@@ -40,6 +40,11 @@ export type Pair = {
     lpToken: Asset;
 }
 
+export type ReadablePriceType = {
+    numberOfDecimalZeros: number;
+    val: string;
+}
+
 export type Paginator<T> = {
     data: Array<T>;
 } & ({

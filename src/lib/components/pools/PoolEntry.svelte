@@ -1,38 +1,35 @@
 <script lang="ts">
 	import arrowhoriz from '$lib/images/common/arrowhoriz.svg';
-	import ext from '$lib/images/common/externallink.svg';
-	import type { Pair } from '$lib/types';
-	import { getReadablePriceInCcy, makeNumberReadable } from '$lib/number-utils';
-	import { createAmountFromBalance } from '@chromia/ft4';
-	import Tokenimg from '../swap/tokenimg.svelte';
-	import { shortenId } from '$lib/utils';
+	import { getReadablePriceInCcy, getReadableTvlCcy } from '$lib/number-utils';
+	import Tokenimg from '$lib/components/common/tokenimg.svelte';
 	import { goto } from '$app/navigation';
-	import ReadablePrice from '../common/readablePrice.svelte';
+	import ReadablePrice from '$lib/components/common/readablePrice.svelte';
+	import { onMount } from 'svelte';
+	import { updatePairStats } from '$lib/states/pools/pool-state-interactions.svelte';
+	import { poolsData } from '$lib/states/pools/pool-states.svelte';
+	import Linkid from '../common/linkid.svelte';
 
-	let { pair }: { pair: Pair } = $props();
+	const TWENTY_SECONDS = 20000;
+	let { id }: { id: Buffer } = $props();
+	let { loading, pair } = $derived(
+		poolsData.allPairs.find(p => p.pair.id.compare(id) === 0)!
+	);
 
 	function onclick() {
 		goto('/pools/' + pair.id.toString('hex'));
 	}
-	function explore(e: MouseEvent) {
-		e.stopPropagation();
-		window
-			.open(
-				'https://explorer.chromia.com/testnet/' +
-					'FA289E086E3D6C3277336E270BADDF75035C1F049F242AB2CF61773D2822213D' +
-					'/asset/' +
-					pair.asset1.id.toString('hex'),
-				'_blank'
-			)
-			?.focus();
-	}
+
+	onMount(()=> {
+		const timerId = setInterval(() => updatePairStats(id), TWENTY_SECONDS)
+		return () => clearInterval(timerId);
+	});
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	{onclick}
-	class="flex clickable poolentry mb-2 rounded-3xl items-center p-5 text-white text-xl w-full"
+	class="flex clickable poolentry mb-2 rounded-3xl items-center p-5 {loading ? "text-[#fff8]":"text-white"} text-xl w-full"
 >
 	<div class="identifier flex items-center overflow-hidden text-ellipsis flex-[1_1_0.25rem]">
 		<Tokenimg class="mr-4 w-[45px] h-[45px]" src={pair.asset1.iconUrl} alt="logo" />
@@ -42,14 +39,9 @@
 		</div>
 	</div>
 	<div class="money flex min-[801px]:basis-1 min-[801px]:grow items-center">
-		<button onclick={explore} class="max-[800px]:hidden flex grow basis-1 justify-center text-lg opacity-70">
-			<span> {shortenId(pair.asset1.id)} </span>
-			<img src={ext} class="ml-1 w-[18px]" alt="open in explorer" />
-		</button>
+		<Linkid id={id} button imgClass="w-[18px]"/>
 		<div class="max-[630px]:hidden max-[800px]:mr-8 grow basis-1">
-			{makeNumberReadable(
-				createAmountFromBalance(pair.amountCcy * 2n, pair.ccy.decimals).toString()
-			)}
+			{getReadableTvlCcy(pair)}
 		</div>
 		<div class="grow basis-1">
 			<ReadablePrice fontSize={1.25} {...getReadablePriceInCcy(pair)} />
@@ -67,7 +59,7 @@
 		border: solid #1a1a1a 2px;
 		position: relative;
 		text-align: center;
-		transition: none;
+		transition: transform 0.25s ease, filter 0.25s ease;
 		&:hover {
 			background-image: linear-gradient(to right, #ff02d188 0, #8eeafc88 100%);
 			border-color: #fff8;

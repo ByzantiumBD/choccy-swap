@@ -5,18 +5,32 @@
 	import { page } from '$app/state';
 	import Footer from '$lib/components/home/footer.svelte';
 	import Header from '$lib/components/common/header.svelte';
+	import { onMount } from 'svelte';
+	import { connect } from '$lib/interactions/connection';
+	import Spinner from '$lib/components/common/spinner.svelte';
 
 	let { children } = $props();
 
 	let isSwap = $derived(page.url.pathname.match(/swap/i) !== null);
 	let isHome = $derived(page.url.pathname.match(/^\/$/) !== null);
+	let loading = $state(true)
+
+	onMount(async () => {
+		if (isHome) loading = false;
+		await connect()
+		loading = false;
+	})
 </script>
 
 <div class="overflow-hidden relative bg-black min-h-screen flex flex-col justify-between">
 	<Header {isSwap} />
 
 	<Background>
-		{@render children()}
+		{#if loading}
+			<Spinner />
+		{:else}
+			{@render children()}
+		{/if}
 	</Background>
 
 	{#if isHome}
