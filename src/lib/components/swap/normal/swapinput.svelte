@@ -105,6 +105,20 @@
 		>
 	</div>
 	<div class="flex flex-col items-end">
+		<div class="flex text-[#fff8] text-sm">
+			<button class="clickable mr-2">
+				25%
+			</button>
+			<button class="clickable mr-2">
+				50%
+			</button>
+			<button class="clickable mr-2">
+				75%
+			</button>
+			<button class="clickable mr-2">
+				100%
+			</button>
+		</div>
 		<input
 			onclick={(e) => e.currentTarget.select()}
 			type="text"
@@ -113,7 +127,7 @@
 			{oninput}
 			bind:value={text}
 		/>
-		<!--span class="text-sm opacity-50">${valueInDollars}</span-->
+		<span class="text-sm opacity-50">${"valueInDollars"}</span>
 	</div>
 </div>
 

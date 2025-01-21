@@ -1,6 +1,8 @@
 <script lang="ts">
+	import FloatingLiquidity from '../../components/swap/pro/FloatingLiquidity.svelte';
+	import FloatingOrders from '../../components/swap/pro/FloatingOrders.svelte';
+	import FloatingSwap from '../../components/swap/pro/FloatingSwap.svelte';
 	import OrderPro from '$lib/components/swap/pro/OrderPro.svelte';
-
 	import Topbar from '$lib/components/swap/pro/topbar.svelte';
 </script>
 
@@ -14,35 +16,15 @@
 		<OrderPro />
 	</div>
 
-	<div class="flex grow my-3 w-full items-stretch text-xl font-semibold justify-around">
-		<div class="floating">
-			<button class="navigation_buttons {'selected'}">Swap</button>
-		</div>
-		<div class="floating">
-			<button class="navigation_buttons">Orders</button>
-		</div>
-		<div class="floating">
-			<button class="navigation_buttons">Liquidity</button>
-		</div>
+	<div class="flex my-3 w-full items-stretch text-xl font-semibold justify-around">
+		<FloatingSwap />
+		<FloatingOrders />
+		<FloatingLiquidity />
 	</div>
 </div>
 
 <style>
-	.navigation_buttons {
-		padding: 0 0.5rem 0.1rem 0.5rem;
-		&.selected {
-			color: #fff;
-			border-bottom: solid #ed32bf 3px;
-		}
-	}
 	.boxblur {
 		backdrop-filter: blur(15px);
-	}
-	.floating {
-		background-color: #1a1a1a;
-		border-radius: 2rem;
-		margin: 0 0.75rem;
-		flex-grow: 1;
-		flex-basis: 1px;
 	}
 </style>
