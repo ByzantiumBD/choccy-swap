@@ -1,19 +1,20 @@
 <script lang="ts">
+	import Tokenimg from "$lib/components/common/tokenimg.svelte";
 	import { loadAllOrders, splitAllOrdersInSteps, TWENTY_SECONDS } from "$lib/states/shared/order-state-interactions.svelte";
 	import type { OrderInfo } from "$lib/states/shared/types";
 	import { swapData } from "$lib/states/swap/swap-states.svelte";
 	import { onMount } from "svelte";
+	import OrderProChart from "./OrderProChart.svelte";
 
-	
 	let loading = $state(true);
 
 	let orders1: { buy: OrderInfo[]; sell: OrderInfo[] } | undefined = $derived.by(() => {
 		if (!swapData.pair1) return undefined;
-		return splitAllOrdersInSteps(swapData.pair1, [100, 200, 300, 400, 500]);
+		return splitAllOrdersInSteps(swapData.pair1, [100, 250, 500]);
 	});
 	let orders2: { buy: OrderInfo[]; sell: OrderInfo[] } | undefined = $derived.by(() => {
 		if (!swapData.pair2) return undefined;
-		return splitAllOrdersInSteps(swapData.pair2, [100, 200, 300, 400, 500]);
+		return splitAllOrdersInSteps(swapData.pair2, [100, 250, 500]);
 	});
 
 	async function load() {
@@ -33,25 +34,22 @@
 <div class="rounded-3xl grow flex flex-col bg-[#10101099] boxblur">
 	<h2 class="px-5 py-3 text-2xl font-bold bg-black rounded-t-3xl">OrderBook</h2>
 	<div class="allcenter flex-col text-xl">
-		<div class="flex flex-row w-full">
-			<div class="p-3 border-r border-[#fff8] flex justify-center grow flex-1">
-				<span class="underline decoration-[#8eeafc] decoration-2 underline-offset-2">Selling</span>
-			</div>
-			<div class="p-3 flex justify-center grow flex-1">
-				<span class="underline decoration-[#ed32bf] decoration-2 underline-offset-2">Buying</span>
-			</div>
+		<div class="allcenter m-5 self-stretch">
+			<h3 class="text-xl font-extrabold mr-auto">Route</h3>
+			<Tokenimg class="w-[50px]" src={swapData.token1?.asset.iconUrl ?? ""} />
+			{#if swapData.pair2}
+				<span class="mx-3">&gt;</span>
+				<Tokenimg class="w-[50px]"  src={swapData.pair2.ccy.iconUrl ?? ""} />
+			{/if}
+			<span class="mx-3">&gt;</span>
+			<Tokenimg class="w-[50px]"  src={swapData.token2?.asset.iconUrl ?? ""} />
 		</div>
-		<div class="w-full flex border-t border-[#fff8] text-base">
-			<div class="border-r border-[#fff8] grow flex justify-around py-2">
-				<span> Price </span>
-				<span> TVL </span>
-				<!-- Crea Elemento Order -->
-			</div>
-			<div class="grow flex justify-around py-2">
-				<span> TVL </span>
-				<span> Price </span>
-				<!-- Crea Elemento Order -->
-			</div>
+		<div class="allcenter flex-col mt-auto self-stretch">
+			<OrderProChart orders={orders1} pair={swapData.pair1} {loading}/>
+
+			{#if swapData.pair2}
+				<OrderProChart orders={orders2} pair={swapData.pair2} {loading}/>
+			{/if}
 		</div>
 	</div>
 </div>

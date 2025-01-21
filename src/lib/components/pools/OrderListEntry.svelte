@@ -22,7 +22,7 @@
 </script>
 
 <div
-	style="--width:{order?.width ?? 0}%;--color:{sell ? '#8eeafc88' : '#ed32bf88'};--right:{sell
+	style="--width:{order?.width ?? 0}%;--color:{!sell ? '#8eeafc88' : '#ed32bf88'};--right:{sell
 		? '0'
 		: ''};--left:{sell ? '' : '0'};"
 	class="{loading ? 'text-[#fff8]' : ''} orders {sell

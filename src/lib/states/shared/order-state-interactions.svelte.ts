@@ -45,13 +45,19 @@ export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 		previousStep = BigInt(step)
 	});
 	rangesPerThou.push({ start: previousStep, end: undefined })
-	const currentPrice = calcPrice(pair.amount1, pair.amountCcy);
+	const inverseCurrentPrice = calcPrice(pair.amount1, pair.amountCcy);
 
-	const buyInfos = rangesPerThou.map((r) => createOrderInfoSection(r, currentPrice, false));
-	const sellInfos = rangesPerThou.map((r) => createOrderInfoSection(r, currentPrice, true));
+	const buyInfos = rangesPerThou.map(
+		(r) => createOrderInfoSection(r, inverseCurrentPrice, false)
+	);
+	const sellInfos = rangesPerThou.map(
+		(r) => createOrderInfoSection(r, inverseCurrentPrice, true)
+	);
 
-	const buyThresholds = buyInfos.map((i) => i.startPrice);
-	const sellThresholds = sellInfos.map((i) => i.endPrice);
+	// prices go up in here, cause inverse
+	const buyThresholds = buyInfos.map((i) => i.endPrice);
+	// prices go down in here, cause inverse
+	const sellThresholds = sellInfos.map((i) => i.startPrice);
 
 	const orderInfo = allOrders[getId(pair.id)];
 	if (orderInfo === undefined) return undefined;
@@ -59,10 +65,11 @@ export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 
 	orders.map((o) => {
 		const ts = o.buyCcy? sellThresholds : buyThresholds
-		const idx = ts.findIndex((t) => (o.buyCcy ? o.price <= t : o.price >= t));
+		console.log(ts)
+		const idx = ts.findIndex((t) => (o.buyCcy ? o.price >= t : o.price <= t));
 
-		if(!ts[idx]) {
-			console.error("rounding errors in order splitting");
+		if(ts[idx] === undefined) {
+			console.error("rounding errors in order splitting - ", idx);
 			return;
 		}
 
