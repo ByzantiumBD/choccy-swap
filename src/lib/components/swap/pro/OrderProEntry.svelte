@@ -1,15 +1,17 @@
 <script lang="ts">
 	import type { OrderInfo } from "$lib/states/shared/types";
-	import ReadablePrice from "../common/readablePrice.svelte";
+	import ReadablePrice from "$lib/components/common/readablePrice.svelte";
 
     type Props = {
-        order: OrderInfo | undefined,
+        orders1: OrderInfo | undefined,
+        orders2: OrderInfo | undefined,
         sell: boolean,
         loading: boolean,
     }
 
-	let { order, sell, loading }: Props = $props();
-    let ttData = $derived(createTooltip(order))
+	let { orders1, orders2, sell, loading }: Props = $props();
+    let tt1Data = $derived(createTooltip(orders1))
+    let tt2Data = $derived(createTooltip(orders2))
 
     function createTooltip(order: OrderInfo | undefined ) {
         const tt = order?.tooltip;

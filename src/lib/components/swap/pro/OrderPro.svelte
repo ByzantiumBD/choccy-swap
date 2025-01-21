@@ -1,4 +1,33 @@
 <script lang="ts">
+	import { loadAllOrders, splitAllOrdersInSteps, TWENTY_SECONDS } from "$lib/states/shared/order-state-interactions.svelte";
+	import type { OrderInfo } from "$lib/states/shared/types";
+	import { swapData } from "$lib/states/swap/swap-states.svelte";
+	import { onMount } from "svelte";
+
+	
+	let loading = $state(true);
+
+	let orders1: { buy: OrderInfo[]; sell: OrderInfo[] } | undefined = $derived.by(() => {
+		if (!swapData.pair1) return undefined;
+		return splitAllOrdersInSteps(swapData.pair1, [100, 200, 300, 400, 500]);
+	});
+	let orders2: { buy: OrderInfo[]; sell: OrderInfo[] } | undefined = $derived.by(() => {
+		if (!swapData.pair2) return undefined;
+		return splitAllOrdersInSteps(swapData.pair2, [100, 200, 300, 400, 500]);
+	});
+
+	async function load() {
+		if (!swapData.pair1) return;
+		loading = true;
+		await loadAllOrders(swapData.pair1.id);
+		if (swapData.pair2) await loadAllOrders(swapData.pair2.id);
+		loading = false;
+	}
+
+	onMount(() => {
+		const i = setInterval(load, TWENTY_SECONDS);
+		return () => clearInterval(i)
+	});
 </script>
 
 <div class="rounded-3xl grow flex flex-col bg-[#10101099] boxblur">

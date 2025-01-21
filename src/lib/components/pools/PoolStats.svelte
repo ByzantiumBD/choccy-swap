@@ -9,6 +9,7 @@
 	import { getPairInfo } from '$lib/interactions/swaps';
 
 	let loading: boolean = $state(true);
+	// eslint-disable-next-line no-undef
 	let updater: NodeJS.Timeout | undefined = $state(undefined);
 
 	const NULL_ID = Buffer.from(

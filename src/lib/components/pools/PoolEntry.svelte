@@ -43,9 +43,9 @@
 		<div class="max-[630px]:hidden max-[800px]:mr-8 grow basis-1">
 			{getReadableTvlCcy(pair)}
 		</div>
-		<div class="grow basis-1">
+		<div class="grow basis-1 flex justify-center">
 			<ReadablePrice fontSize={1.25} {...getReadablePriceInCcy(pair)} />
-			<span>CCY</span>
+			<span class="ml-2">CCY</span>
 		</div>
 	</div>
 	<div class="w-[40px] h-[40px]">

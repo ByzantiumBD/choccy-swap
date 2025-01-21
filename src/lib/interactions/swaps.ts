@@ -155,7 +155,7 @@ export async function calcOutputIncludingOrders(
 	);
 
 	const orderPaginator = await getAllOrdersByPriceRange(
-		pair.asset1,
+		pair.asset1.id,
 		buyCcy ? currPrice : theoreticalEndPrice,
 		buyCcy ? theoreticalEndPrice : currPrice
 	);
@@ -244,7 +244,7 @@ export async function calcInputIncludingOrders(
     }
 
 	const orderPaginator = await getAllOrdersByPriceRange(
-		pair.asset1,
+		pair.asset1.id,
 		buyCcy ? currPrice : theoreticalEndPrice,
 		buyCcy ? theoreticalEndPrice : currPrice
 	);
