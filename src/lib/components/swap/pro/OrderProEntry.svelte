@@ -19,11 +19,11 @@
 	}
 </script>
 
-<div class="relative mt-1 p-0.5 flex self-stretch {sell? "justify-end":"justify-start flex-row-reverse"}">
-    <span class="text-[#fff8] text-sm {sell? "mr-auto":"ml-auto"}">
+<div class="section relative h-[100px] w-[2.75em] text-[#fff8] text-sm">
+    <div class="tvl w-full text-center">
         {order.volume} {order.symbol}
-    </span>
-    <span class="range text-[#fff8] text-sm relative">
+    </div>
+    <span class="range">
         {order.priceRange}
         <span style="{sell?"right":"left"}:150%;" class="tooltip">
             {#if ttData.num.val === "..."}
@@ -36,29 +36,30 @@
         </span>
     </span>
     <div
-        style="width: {order.width || 50}%;"
-        class={['bar', sell && "sell", (loading || order.width===0) && "loading"]}>
+        style="height: {order.width || 3}%;"
+        class={['bar', sell && "sell", loading && "loading"]}>
     </div>
 </div>
 
 <style lang="less">
 	.bar {
-		background-color: #8eeafc;
+		background-color: #8eeafc50;
 		position: absolute;
 		left: 0;
-        top: 0;
-        height: 100%;
+        bottom: 0;
+        width: 100%;
         z-index: -1;
 		&.sell {
-			background-color: #ed32bf;
-			left: unset;
-			right: 0;
+			background-color: #ed32bf50;
 		}
 		&.loading {
 			background-color: #fff2 !important;
 		}
 	}
 	.range{
+        position: absolute;
+        top: 110%;
+        left: 0;
 	    & .tooltip {
 	        display: none;
 	        padding: 0.5rem;
@@ -73,30 +74,14 @@
 	        display: flex;
 	    }
 	}
-
-	// .orders:hover {
-	// 	background-color: #0004;
-	// }
-	// .orders {
-	// 	--width: 50%;
-	// 	position: relative;
-	// 	&::before {
-	// 		transition: all 0.25s ease;
-	// 		z-index: -1;
-	// 		position: absolute;
-	// 		right: var(--right);
-	// 		left: var(--left);
-	// 		background-color: var(--color);
-	// 		width: var(--width);
-	// 		top: 0;
-	// 		height: 100%;
-	// 		content: '';
-	// 	}
-	// }
-
-	// @media (max-width: 600px) {
-	// 	.O {
-	// 		display: none;
-	// 	}
-	// }
+    .section {
+        display: flex;
+        align-items: flex-end;
+        & > .tvl {
+            display: none;
+        }
+        &:hover > .tvl {
+            display: block;
+        }
+    }
 </style>

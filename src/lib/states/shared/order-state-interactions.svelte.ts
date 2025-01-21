@@ -17,7 +17,7 @@ export const TWENTY_SECONDS = 20000;
  */
 export async function loadAllOrders(pairId: BufferId) {
 	const id = getId(pairId);
-    allOrders[id] = { orders: [], updater: undefined };
+	allOrders[id] = { orders: [], updater: undefined };
 
 	let paginator = await getAllOrdersByPriceRange(pairId, 0n, MAX_PRICE);
 
@@ -40,19 +40,15 @@ export async function loadAllOrders(pairId: BufferId) {
 export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 	const rangesPerThou: PerthouPriceRange[] = [];
 	let previousStep = 0n;
-	stepsPerThou.forEach(step => {
-		rangesPerThou.push({ start: previousStep, end: BigInt(step) })
-		previousStep = BigInt(step)
+	stepsPerThou.forEach((step) => {
+		rangesPerThou.push({ start: previousStep, end: BigInt(step) });
+		previousStep = BigInt(step);
 	});
-	rangesPerThou.push({ start: previousStep, end: undefined })
+	rangesPerThou.push({ start: previousStep, end: undefined });
 	const inverseCurrentPrice = calcPrice(pair.amount1, pair.amountCcy);
 
-	const buyInfos = rangesPerThou.map(
-		(r) => createOrderInfoSection(r, inverseCurrentPrice, false)
-	);
-	const sellInfos = rangesPerThou.map(
-		(r) => createOrderInfoSection(r, inverseCurrentPrice, true)
-	);
+	const buyInfos = rangesPerThou.map((r) => createOrderInfoSection(r, inverseCurrentPrice, false));
+	const sellInfos = rangesPerThou.map((r) => createOrderInfoSection(r, inverseCurrentPrice, true));
 
 	// prices go up in here, cause inverse
 	const buyThresholds = buyInfos.map((i) => i.endPrice);
@@ -64,30 +60,32 @@ export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 	const orders = allOrders[getId(pair.id)].orders;
 
 	orders.map((o) => {
-		const ts = o.buyCcy? sellThresholds : buyThresholds
-		console.log(ts)
+		const ts = o.buyCcy ? sellThresholds : buyThresholds;
 		const idx = ts.findIndex((t) => (o.buyCcy ? o.price >= t : o.price <= t));
 
-		if(ts[idx] === undefined) {
-			console.error("rounding errors in order splitting - ", idx);
+		if (ts[idx] === undefined) {
+			console.error('rounding errors in order splitting - ', idx);
 			return;
 		}
 
 		const tvl = o.buyCcy ? o.amount.value : (o.amount.value * o.price) / PRICE_PRECISION;
 
-		(o.buyCcy? sellInfos : buyInfos)[idx].number += 1;
-		(o.buyCcy? sellInfos : buyInfos)[idx].volume += tvl;
+		(o.buyCcy ? sellInfos : buyInfos)[idx].number += 1;
+		(o.buyCcy ? sellInfos : buyInfos)[idx].volume += tvl;
 	});
 
-	const buyTvl = calcTvl(buyInfos)
-	const sellTvl = calcTvl(sellInfos)
+	// buy asset1, sell ccy (in asset1)
+	const buyMax = findMax(buyInfos);
+	// buy ccy, sell asset1 (in asset1)
+	const sellMax = findMax(sellInfos);
+	const max = buyMax > sellMax ? buyMax : sellMax;
 
-	function calcWidth(volume: bigint, tvl: bigint) {
-		if (tvl === 0n) return 0;
-		return Number(volume * 100n / tvl)
+	function calcWidth(volume: bigint) {
+		if (max === 0n) return 0;
+		return Number((volume * 100n) / max);
 	}
 
-	const buys: OrderInfo[] = buyInfos.map(i => {
+	const buys: OrderInfo[] = buyInfos.map((i) => {
 		return {
 			number: makeNumberReadable(numToString(i.number)),
 			volume: makeNumberReadable(
@@ -95,11 +93,11 @@ export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 			),
 			symbol: pair.asset1.symbol,
 			priceRange: i.priceRange,
-			width: calcWidth(i.volume, buyTvl),
-			tooltip: calcTooltip(i, pair.asset1.decimals, pair.ccy.decimals),
-		}
-	})
-	const sells: OrderInfo[] = sellInfos.map(i => {
+			width: calcWidth(i.volume),
+			tooltip: calcTooltip(i, pair.asset1.decimals, pair.ccy.decimals)
+		};
+	});
+	const sells: OrderInfo[] = sellInfos.map((i) => {
 		return {
 			number: makeNumberReadable(numToString(i.number)),
 			volume: makeNumberReadable(
@@ -107,17 +105,16 @@ export function splitAllOrdersInSteps(pair: Pair, stepsPerThou: number[]) {
 			),
 			symbol: pair.asset1.symbol,
 			priceRange: i.priceRange,
-			width: calcWidth(i.volume, sellTvl),
-			tooltip: calcTooltip(i, pair.asset1.decimals, pair.ccy.decimals),
-		}
-	})
-	
+			width: calcWidth(i.volume),
+			tooltip: calcTooltip(i, pair.asset1.decimals, pair.ccy.decimals)
+		};
+	});
+
 	return {
 		sell: sells,
-		buy: buys,
-	}
+		buy: buys
+	};
 }
-
 
 function createOrderInfoSection(range: PerthouPriceRange, currentPrice: bigint, sell: boolean) {
 	let endPrice = 0n;
@@ -141,29 +138,30 @@ function createOrderInfoSection(range: PerthouPriceRange, currentPrice: bigint, 
 	const info: OrderInfoSection = {
 		number: 0,
 		volume: 0n,
-		priceRange: (sell ? '+' : '-') + Number(range.end)/10 + '%',
+		priceRange: (sell ? '+' : '-') + Number(range.end) / 10 + '%',
 		startPrice: low,
-		endPrice: high,
+		endPrice: high
 	};
 
 	if (range.end === undefined) {
-		info.priceRange = (sell ? '>' : '<') + Number(range.start)/10 + '%';
+		info.priceRange = (sell ? '>' : '<') + Number(range.start) / 10 + '%';
 	}
 
 	return info;
 }
 
-
-function calcTvl(os: OrderInfoSection[]): bigint {
-	return os.reduce<bigint>((tot: bigint, o: OrderInfoSection) => {
-		return tot + (o?.volume ?? 0n);
-	}, 0n);
+function findMax(os: OrderInfoSection[]): bigint {
+	let max = 0n;
+	os.forEach((o) => {
+		if (o.volume > max) max = o.volume;
+	});
+	return max;
 }
 
 function calcTooltip(o: OrderInfoSection, assetDecimals: number, ccyDecimals: number): TooltipData {
 	const decimalsCorrection = 10 ** (ccyDecimals - assetDecimals);
 	const startPricePerCcy = (Number(o.startPrice) / Number(PRICE_PRECISION)) * decimalsCorrection;
-	const endPricePerCcy = Number(o.endPrice) / Number(PRICE_PRECISION) * decimalsCorrection;
+	const endPricePerCcy = (Number(o.endPrice) / Number(PRICE_PRECISION)) * decimalsCorrection;
 	const startPrice = 1 / startPricePerCcy;
 	let endPrice = 1 / endPricePerCcy;
 	if (o.endPrice === PRICE_PRECISION * PRICE_PRECISION) {
