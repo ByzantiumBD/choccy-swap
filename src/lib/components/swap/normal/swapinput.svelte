@@ -1,23 +1,24 @@
 <script lang="ts">
 	import arrow from '$lib/images/common/arrow.svg';
 	import Tokenimg from '$lib/components/common/tokenimg.svelte';
-	import { makeNumberReadable, removeTrailingZeros, shortenNumber } from '$lib/number-utils';
+	import { makeNumberReadable } from '$lib/number-utils';
 	import { untrack } from 'svelte';
-	import { createAmount } from '@chromia/ft4';
 	import Tokens from '$lib/components/swap/common/tokens.svelte';
 	import { swapData } from '$lib/states/swap/swap-states.svelte';
-	import { updateInputs } from '$lib/states/swap/swap-state-interactions.svelte';
 	import { connectionState } from '$lib/states/shared/connection-state.svelte';
+	import { getInputManager } from '../common/inputManager.svelte';
 
 	type Props = {
 		isInput: boolean;
 	};
 
 	let { isInput }: Props = $props();
-	let tkInfo = $derived(isInput? () => swapData.token1 : () => swapData.token2);
+	let tkInfo = $derived(isInput? swapData.token1 : swapData.token2);
+	let text = $state('');
+
+	let inputManager = getInputManager(isInput);
 
 	let isTokensHidden = $state(true);
-	let text = $state('');
 
 	function closeTokens() {
 		isTokensHidden = true;
@@ -27,54 +28,18 @@
 	}
 
 	$effect(() => {
-		const currentText = untrack(() => text);
-		const newVal = isInput? swapData.input1 : swapData.input2;
-		if (newVal.value === 0n && !currentText.match(/^0?\.?0*$/)) {
-			text = '';
-			return;
-		}
-		const txt = removeTrailingZeros(currentText);
-		if ((txt ? txt : '0') !== newVal.toString()) {
-			text = shortenNumber(newVal.toString());
+		const newText = inputManager.effect(untrack(() => text)) 
+		if (newText !== undefined) {
+			text = newText;
 		}
 	});
 
-	async function oninput() {
-		let newText = text;
-
-		if (newText === '.') newText = '0.';
-		// remove leading zeros
-		newText = newText.replace(/^0+(?=[1-9])/, '');
-		// remove every non-digit besides "."
-		newText = newText.replaceAll(/[^0-9.]/g, '');
-		// remove all "." after the first
-		newText = newText.replaceAll(/(?<=\..*)\./g, '');
-		const decimals = newText.match(/\.\d+/g);
-		if (decimals && decimals[0]) {
-			// decimals contains the dot as well
-			const expected = (tkInfo()?.asset.decimals ?? 18) + 1;
-
-			if (decimals[0].length >= expected) {
-				const integer = newText.match(/^\d*/);
-				newText = integer + decimals[0].slice(0, expected);
-			}
-		}
-		const t = removeTrailingZeros(newText);
-		if (isInput) {
-			swapData.input1 = createAmount(t ? t : '0', tkInfo()?.asset.decimals ?? 18);
-		} else {
-			swapData.input2 = createAmount(t ? t : '0', tkInfo()?.asset.decimals ?? 18);
-		}
-		updateInputs(isInput);
-		text = newText;
+	async function oninput(e: Event & { currentTarget: HTMLInputElement }) {
+		e.currentTarget.value = await inputManager.oninput(e.currentTarget.value)
 	}
 
-	function maxBalance() {
-		if (isInput) {
-			swapData.input1 = tkInfo()?.amountOwned ?? createAmount(0, 0);
-		} else {
-			swapData.input2 = tkInfo()?.amountOwned ?? createAmount(0, 0);
-		}
+	function setBalance(percent: number) {
+		inputManager.setBalance(tkInfo?.amountOwned, percent)
 	}
 </script>
 
@@ -87,38 +52,40 @@
 			onclick={() => openTokens()}
 			class="{connectionState.loading? "disabled" : ""} clickable allcenter bg-[#101010] rounded-full mt-1 py-2 px-3 font-bold border border-gray-600"
 		>
-			{#if tkInfo()?.asset !== undefined}
+			{#if tkInfo?.asset !== undefined}
 				<Tokenimg
-					src={tkInfo()!.asset.iconUrl}
+					src={tkInfo!.asset.iconUrl}
 					alt="token logo"
 					class="ml-1 mr-2"
 					style="width:32px;height:32px"
 				/>
-				{tkInfo()!.asset.symbol}
+				{tkInfo!.asset.symbol}
 			{:else}
 				Choose Token
 			{/if}
 			<img src={arrow} alt="choose token" class="w-[30px] h-[30px]" />
 		</button>
-		<button onclick={maxBalance} class="text-sm opacity-50 mt-1 pl-3"
-			>Balance: {makeNumberReadable(tkInfo()?.amountOwned.toString() ?? '0')}</button
+		<button onclick={() => setBalance(100)} class="text-sm opacity-50 mt-1 pl-3"
+			>Balance: {makeNumberReadable(tkInfo?.amountOwned.toString() ?? '0')}</button
 		>
 	</div>
 	<div class="flex flex-col items-end">
-		<div class="flex text-[#fff8] text-sm">
-			<button class="clickable mr-2">
-				25%
-			</button>
-			<button class="clickable mr-2">
-				50%
-			</button>
-			<button class="clickable mr-2">
-				75%
-			</button>
-			<button class="clickable mr-2">
-				100%
-			</button>
-		</div>
+		{#if connectionState.session}
+			<div class="flex text-[#fff8] text-sm">
+				<button onclick={() => setBalance(25)} class="clickable mr-2">
+					25%
+				</button>
+				<button onclick={() => setBalance(50)} class="clickable mr-2">
+					50%
+				</button>
+				<button onclick={() => setBalance(75)} class="clickable mr-2">
+					75%
+				</button>
+				<button onclick={() => setBalance(100)} class="clickable">
+					100%
+				</button>
+			</div>
+		{/if}
 		<input
 			onclick={(e) => e.currentTarget.select()}
 			type="text"
@@ -127,7 +94,9 @@
 			{oninput}
 			bind:value={text}
 		/>
-		<span class="text-sm opacity-50">${"valueInDollars"}</span>
+		{#if tkInfo}
+			<span class="text-sm opacity-50">${makeNumberReadable(swapData.input1.toString())}</span>
+		{/if}
 	</div>
 </div>
 

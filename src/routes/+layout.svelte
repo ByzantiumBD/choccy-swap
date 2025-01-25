@@ -12,11 +12,11 @@
 	let { children } = $props();
 
 	let isSwap = $derived(page.url.pathname.match(/swap/i) !== null);
-	let isHome = $derived(page.url.pathname.match(/^\/$/) !== null);
-	let loading = $state(true)
+	let isHome = $derived(page.url.pathname === "/");
+	let loading = $state(false)
 
 	onMount(async () => {
-		if (isHome) loading = false;
+		if (!isHome) loading = true;
 		await connect()
 		loading = false;
 	})

@@ -11,6 +11,8 @@
 	import OrderProChart from './OrderProChart.svelte';
 	import { isCcy } from '$lib/utils';
 
+	let { isSwap }: { isSwap: boolean } = $props();
+
 	let loading = $state(true);
 	let asset1 = $derived(swapData.token1?.asset);
 	let isAsset1Ccy = $derived((asset1 && isCcy(asset1)) ?? false);
@@ -64,7 +66,7 @@
 				<Tokenimg class="w-[40px]" src={asset3?.iconUrl ?? ''} />
 			{/if}
 		</div>
-		<div class="chartbox allcenter flex-col">
+		<div class="chartbox allcenter flex-col" style="margin-bottom:{(swapData.pair2? 0:180) + (isSwap? 30:0)}px;">
 			<div class="flex items-center justify-start self-stretch">
 				<h3 class="text-xl font-extrabold mr-3">Pair 1</h3>
 				<Tokenimg class="w-[30px]" src={asset1?.iconUrl ?? ''} />
@@ -73,9 +75,14 @@
 			</div>
 			<OrderProChart orders={orders1} {loading} invert={!isAsset1Ccy}/>
 		</div>
+		{#if !isSwap}
+			<div class="text-sm text-[#fff8] text-center mt-2">
+				Orders and liquidity operations only work on single pair routes
+			</div>
+		{/if}
 
 		{#if swapData.pair2}
-			<div class="chartbox allcenter flex-col mt-5">
+			<div class="chartbox allcenter flex-col">
 				<div class="flex items-center justify-start self-stretch">
 					<h3 class="text-xl font-extrabold mr-3">Pair 2</h3>
 					<Tokenimg class="w-[30px]" src={asset2?.iconUrl ?? ''} />

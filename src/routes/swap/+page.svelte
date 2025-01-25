@@ -13,7 +13,7 @@
 	function createAlert(isError: boolean, text: string, link = "") {
 		const a = { id: ++lastAlertId, isError, text, ttl: 100, link };
 		alerts.push(a);
-		if (isError) throw text;
+		return () => killAlert(a.id);
 	}
 	function killAlert(id: number) {
 		const idx = alerts.findIndex((a) => a.id === id);
@@ -23,7 +23,7 @@
 	}
 
 	function success(message: string, link: string) {
-		createAlert(false, message, link)
+		return createAlert(false, message, link)
 	}
 
 	onMount(async () => {
@@ -37,7 +37,7 @@
 
 {#if isProMode.value}
 	abc!
-	<ProMode />
+	<ProMode {success} />
 {:else}
 	<SwapBox {success}/>
 {/if}

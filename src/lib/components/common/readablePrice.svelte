@@ -1,10 +1,19 @@
-<script>
+<script lang="ts">
+    type Props = {
+        class?: string;
+        fontSize?: number;
+        smallFontSize?: number;
+        val: string;
+        numberOfDecimalZeros?: number;
+    }
+
     let {
         class: myClass = "",
         fontSize = 1,
         smallFontSize = undefined,
-        val, numberOfDecimalZeros = 0
-    } = $props()
+        val,
+        numberOfDecimalZeros = 0
+    } : Props = $props()
 </script>
 
 <span class="flex {myClass}" style="position:relative;font-size:{fontSize}rem;">

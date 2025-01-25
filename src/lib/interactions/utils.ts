@@ -1,4 +1,4 @@
-import type { Paginator, TokenInfo } from '$lib/types';
+import type { Paginator, Pair, TokenInfo } from '$lib/types';
 import {
 	type Connection,
 	type Asset,
@@ -110,6 +110,14 @@ export async function getTokenInfo(asset: Asset): Promise<TokenInfo> {
 	return {
 		asset,
 		amountOwned: bal?.amount ?? createAmount(0, asset.decimals)
+	};
+}
+
+export async function getLpTokenInfo(pair: Pair): Promise<TokenInfo> {
+	const bal = await connectionState.session?.account.getBalanceByAssetId(pair.lpToken.id);
+	return {
+		asset: pair.lpToken,
+		amountOwned: bal?.amount ?? createAmount(0, pair.lpToken.decimals)
 	};
 }
 

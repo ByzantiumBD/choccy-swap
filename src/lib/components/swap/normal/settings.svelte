@@ -1,46 +1,26 @@
 <script lang="ts">
 	import CloseSvg from '$lib/images/swap/close.svelte';
 	import { swapData } from '$lib/states/swap/swap-states.svelte';
+	import { getSettingsManager } from '../common/inputManager.svelte';
 
 	let { close, isHidden } = $props();
 
-	let currentSlippage: number = $state(swapData.settings.slippage);
-	let customSlippageValue: number = $state(0);
-	let customSlippageText: string = $state('');
+	let { slippage, deadline } = getSettingsManager();
+	let slippageText = $state(swapData.settings.slippage.toString());
+	let deadlineText = $state(swapData.settings.deadline.toString());
 
 	function onSlippageInput(e: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
-		let text = e.currentTarget.value;
-
-		if (text === '.') text = '0.';
-		text = text.replaceAll(/[^0-9.]/g, '');
-		text = text.replaceAll(/(?<=\..*)\./g, '');
-
-		text = text.slice(0, 6);
-		customSlippageValue = Math.min(Number(text), 100);
-
-		if (customSlippageValue === 100) {
-			customSlippageText = "100";
-		} else {
-			customSlippageText = text
-		}
-
-		e.currentTarget.value = customSlippageText;
-		currentSlippage = customSlippageValue
-		swapData.settings.slippage = currentSlippage;
-	};
-	function onDeadlineInput(e: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
-		let text = e.currentTarget.value;
-
-		text = text.replaceAll(/[^0-9]/g, '');
-		swapData.settings.deadline = Math.min(100, Math.max(Number(text), 1));
-		text = swapData.settings.deadline.toString();
-
-		e.currentTarget.value = text
-	};
+		slippageText = slippage.oninput(e.currentTarget.value);
+		e.currentTarget.value = slippageText;
+	}
 
 	function selectSlippage(value: number) {
-		currentSlippage = value;
-		swapData.settings.slippage = currentSlippage
+		slippage.select(value);
+	}
+
+	function onDeadlineInput(e: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
+		deadlineText = deadline.oninput(e.currentTarget.value);
+		e.currentTarget.value = deadlineText;
 	}
 </script>
 
@@ -66,7 +46,7 @@
 			<div id="slippages" class="allcenter !justify-between grid-cols-3">
 				{#each [0.1, 0.5, 1, 2] as slip}
 					<button
-						aria-current={currentSlippage === slip}
+						aria-current={swapData.settings.slippage === slip}
 						aria-label={""+slip}
 						onclick={() => selectSlippage(slip)} class="selected">
 						{slip}%
@@ -74,20 +54,20 @@
 				{/each}
 				<button
 					onclick={(e) => {
-						selectSlippage(customSlippageValue);
+						selectSlippage(Number(slippageText));
 						(e.currentTarget.children[0] as HTMLInputElement).focus();
 					}}
 					class="col-span-2"
 					aria-label="Custom"
-					aria-current={currentSlippage === customSlippageValue}
+					aria-current={swapData.settings.slippage === Number(slippageText)}
 				>
-					<input type="text" placeholder="Custom" oninput={onSlippageInput} />
+					<input type="text" placeholder="Custom" oninput={onSlippageInput} value={slippageText} />
 				</button>
 			</div>
 			<div class="allcenter mr-3 mt-4">
 				<p class="font-bold mb-1 ml-1 mr-auto">Deadline</p>
 				<div class="border border-[gray] rounded-3xl py-1 px-2">
-					<input type="text" oninput={onDeadlineInput} value={swapData.settings.deadline}
+					<input type="text" oninput={onDeadlineInput} value={deadlineText}
 						style="width:{2}em;text-align:center;" class="deadline" />
 				</div>
 				<span class="mx-2">minutes</span>

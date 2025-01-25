@@ -19,6 +19,26 @@ export type SwapData = {
     impact: number;
 }
 
+export type OrderData = {
+    input1: Amount;
+    price: bigint;
+
+    isBuy: boolean;
+    inverted: boolean;
+
+    deadline: number;
+}
+
+export type LiquidityData = {
+    input1: Amount;
+    input2: Amount;
+
+    lpToken: TokenInfo | undefined;
+
+    share: number;
+    add: boolean;
+}
+
 export function newSwapData(): SwapData {
     return {
         token1: undefined,
@@ -36,5 +56,25 @@ export function newSwapData(): SwapData {
         pair2: undefined,
         
         impact: 0,
+    }
+}
+
+export function newOrderData(): OrderData {
+    return {
+        input1: createAmount(0,0),
+        price: 0n,
+        isBuy: false,
+        inverted: false,
+        deadline: 0,
+    }
+}
+
+export function newLiquidityData(): LiquidityData {
+    return {
+        input1: createAmount(0,0),
+        input2: createAmount(0,0),
+        lpToken: undefined,
+        share: 0,
+        add: false,
     }
 }

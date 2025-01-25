@@ -10,7 +10,7 @@
 	import { swap, switchTokens } from '$lib/states/swap/swap-state-interactions.svelte';
 	import ReadablePrice from '$lib/components/common/readablePrice.svelte';
 
-	let { success }: { success: (msg: string, link: string) => void } = $props();
+	let { success }: { success: (msg: string, link: string) => ()=>void } = $props();
 
 	let isSettingsHidden = $state(true);
 
@@ -29,8 +29,7 @@
 	}
 
 	async function swapClick() {
-		const m = await swap();
-		success(m.msg, m.link)
+		await swap(success);
 	}
 </script>
 
