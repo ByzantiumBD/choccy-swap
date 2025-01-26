@@ -10,6 +10,8 @@
 
 	let { order, sell = false, loading }: Props = $props();
 	let ttData = $derived(createTooltip(order));
+	let innerWidth = $state(500);
+	let smallScreen = $derived(innerWidth < 481);
 
 	function createTooltip(order: OrderInfo) {
 		return {
@@ -17,14 +19,21 @@
 			num2: order.tooltip.two
 		};
 	}
+
+	function showText() {
+		const mustShow = /[<>]/.test(order.priceRange);
+		return !smallScreen || mustShow;
+	}
 </script>
 
-<div class="section relative h-[100px] w-[2.75em] text-[#fff8] text-sm">
+<svelte:window bind:innerWidth />
+
+<div style:width={smallScreen ? "1em":"2.75em"} class="section relative h-[100px] text-[#fff8] text-sm">
     <div class="tvl w-full text-center">
         {order.volume} {order.symbol}
     </div>
     <span class="range">
-        {order.priceRange}
+        {showText() ? order.priceRange : ""}
         <span style="{sell?"right":"left"}:150%;" class="tooltip">
             {#if ttData.num.val === "..."}
                 <span>select a pair</span>
@@ -54,6 +63,11 @@
 		}
 		&.loading {
 			background-color: #fff2 !important;
+		}
+	}
+	@media (max-width: 480px) {
+		.range {
+			left: -50% !important;
 		}
 	}
 	.range{

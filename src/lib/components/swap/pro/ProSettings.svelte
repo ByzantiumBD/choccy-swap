@@ -25,16 +25,20 @@
 </script>
 
 
-<div class="flex m-5">
+<div class="flex items-start m-5 max-[450px]:flex-col">
     {#if !isOrders}
-        <span class="text-lg mr-5">Slippage:</span>
-        <input placeholder="Insert" value={slippageText} oninput={onSlippageInput} />
+        <div class="flex grow">
+            <span class="text-lg mr-5">Slippage:</span>
+            <input placeholder="Insert" value={slippageText} oninput={onSlippageInput} />
+        </div>
     {/if}
-    <span class="text-lg mr-5 ml-auto">Deadline:</span>
-    <input placeholder="Insert" value={deadlineText} oninput={onDeadlineInput} />
-    {#if isOrders}
-        <span class="text-lg mr-5 font-medium">days</span>
-    {/if}
+    <div class="flex grow max-[450px]:mt-3">
+        <span class="text-lg mr-5 ml-auto">Deadline:</span>
+        <input placeholder="Insert" value={deadlineText} oninput={onDeadlineInput} />
+        {#if isOrders}
+            <span class="text-lg mr-5 font-medium">days</span>
+        {/if}
+    </div>
 </div>
 
 <style>

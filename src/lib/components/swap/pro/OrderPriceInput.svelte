@@ -59,7 +59,7 @@
 	});
 </script>
 
-<div class="{!isPriceValid() && 'invalid'} inputbox rounded-2xl m-3 flex p-3">
+<div class="{!isPriceValid() && 'invalid'} inputbox rounded-2xl m-3 mb-5 flex p-3">
 	<div class="flex-[2_0_1px] flex flex-col">
 		<span class="text-base">{'Price'}</span>
 		<input {oninput} bind:value={textPrice} placeholder="0.00" />
@@ -89,10 +89,13 @@
 			</button>
 		{/if}
 	</div>
-	<div class="warning">
-		<div class="text-sm text-[#fff8]">
-			{'Spot price is better than order price. Please adjust the order price.'}
-		</div>
+	<div class="warning max-[470px]:!bottom-[-3rem] max-[470px]:flex-col">
+		<div class="text-sm">
+			Spot price is better than order price.&NonBreakingSpace;
+        </div>
+        <div class="text-sm">
+            Please adjust the order price.
+        </div>
 	</div>
 </div>
 
@@ -122,7 +125,7 @@
 			background-color: #ed328055;
 			border-color: #ed328088;
 			& .warning {
-				display: block;
+				display: flex;
 			}
 		}
 	}
