@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { isProMode } from '$lib/states/swap/swap-states.svelte';
 	import { loadQueryParams } from '$lib/states/swap/swap-state-interactions.svelte';
+	import ProModeMobile from '$lib/sections/Swap/ProModeMobile.svelte';
 
 	let alerts: AlertType[] = $state([]);
 	let lastAlertId = 0;
@@ -36,8 +37,12 @@
 </script>
 
 {#if isProMode.value}
-	abc!
-	<ProMode {success} />
+	<div class="contents max-[1000px]:hidden">
+		<ProMode {success} />
+	</div>
+	<div class="contents min-[1001px]:hidden">
+		<ProModeMobile {success} />
+	</div>
 {:else}
 	<SwapBox {success}/>
 {/if}

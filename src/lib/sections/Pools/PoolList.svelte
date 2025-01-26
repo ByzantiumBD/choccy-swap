@@ -26,10 +26,10 @@ import PoolEntry from '$lib/components/pools/PoolEntry.svelte';
 			<span class="name mr-1">Name</span>
 			<span class="ticker">(Ticker)</span>
 		</div>
-		<div class="money flex min-[801px]:basis-1 min-[801px]:grow mr-[40px]">
+		<div class="money flex basis-1 grow mr-[40px]">
 			<span class="address max-[800px]:hidden">Address</span>
-			<span class="max-[630px]:hidden max-[800px]:mr-8 tvl">TVL&nbsp;(CCY)</span>
-			<span class="price">Price</span>
+			<span class="max-[630px]:hidden tvl">TVL&nbsp;(CCY)</span>
+			<span class="max-[570px]:hidden price">Price</span>
 		</div>
 	</div>
 	<div class="overflow-y-scroll mb-auto">

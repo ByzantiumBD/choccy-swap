@@ -38,9 +38,9 @@
 			<div class="opacity-80 shrink">({pair.asset1.symbol})</div>
 		</div>
 	</div>
-	<div class="money flex min-[801px]:basis-1 min-[801px]:grow items-center">
-		<Linkid id={id} button imgClass="w-[18px]"/>
-		<div class="max-[630px]:hidden max-[800px]:mr-8 grow basis-1">
+	<div class="max-[570px]:hidden money flex basis-1 grow items-center">
+		<Linkid buttonOrLinkClass="max-[800px]:hidden" id={id} button imgClass="w-[18px]"/>
+		<div class="max-[630px]:hidden grow basis-1">
 			{getReadableTvlCcy(pair)}
 		</div>
 		<div class="grow basis-1 flex justify-center">

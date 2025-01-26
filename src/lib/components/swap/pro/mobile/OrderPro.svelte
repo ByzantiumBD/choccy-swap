@@ -8,7 +8,7 @@
 	import type { OrderInfo } from '$lib/states/shared/types';
 	import { swapData } from '$lib/states/swap/swap-states.svelte';
 	import { onMount } from 'svelte';
-	import OrderProChart from './OrderProChart.svelte';
+	import OrderProChart from '../OrderProChart.svelte';
 	import { isCcy } from '$lib/utils';
 
 	let { isSwap }: { isSwap: boolean } = $props();
@@ -53,8 +53,8 @@
 	});
 </script>
 
-<div class="rounded-3xl flex flex-col bg-[#10101099] boxblur">
-	<h2 class="px-5 py-3 text-2xl font-bold bg-black rounded-t-3xl">OrderBook</h2>
+<div class="flex flex-col bg-[#10101099] boxblur">
+	<h2 class="px-5 py-3 text-2xl font-bold bg-black">OrderBook</h2>
 	<div class="allcenter flex-col text-xl p-5">
 		<div class="allcenter self-stretch mb-5">
 			<h3 class="text-xl font-extrabold mr-auto">Route</h3>

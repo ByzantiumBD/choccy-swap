@@ -42,7 +42,7 @@ import { calcLpTokensFromAmountInOrOut } from "$lib/interactions/liquidity";
 	}
 </script>
 
-<div class="widecenter">
+<div class="widecenter max-[900px]:flex-col">
 	<div class="mt-11 flex-1 flex items-stretch justify-start flex-col pb-[5.5rem]">
 		<ProInputs addLiquidity={isAdd} liquidity isInput />
 		<ProInputs addLiquidity={isAdd} liquidity />

@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="widecenter">
+<div class="widecenter max-[900px]:flex-col">
 	<div class="mt-11 flex-1 widecenter flex-col">
 		<ProInputs isInput />
 		<ProInputs />

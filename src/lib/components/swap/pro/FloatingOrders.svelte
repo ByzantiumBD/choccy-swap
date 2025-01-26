@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="widecenter">
+<div class="widecenter max-[900px]:flex-col">
 	<div class="flex-1 flex items-stretch justify-start flex-col pb-[1rem]">
 		<div class="ml-5 mt-3 text-2xl">{orderData.isBuy ? 'Buy' : 'Sell'}</div>
 		<!-- Inputs -->
