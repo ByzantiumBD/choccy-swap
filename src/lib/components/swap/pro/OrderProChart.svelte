@@ -48,13 +48,13 @@
 </script>
 
 <div class="flex justify-center items-stretch self-stretch mx-5 my-3 relative">
-	<div class="chart sell">
+	<div class="chart buy">
 		{#each buys as buy}
 			<OrderProEntry order={buy} {loading} />
 		{/each}
 	</div>
 	<span class="bar"></span>
-	<div class="chart buy">
+	<div class="chart sell">
 		{#each sells as sell}
 			<OrderProEntry order={sell} sell {loading} />
 		{/each}
@@ -66,7 +66,7 @@
 		flex: 1 0 1px;
 		display: flex;
 		border-bottom: solid 1px #fff8;
-		&.sell {
+		&.buy {
 			flex-direction: row-reverse;
 		}
 	}
