@@ -2,9 +2,7 @@
 </script>
 
 <div id="error" class="text-white allcenter flex-col rounded-3xl p-2">
-	<h1
-		class="text-6xl font-bold text-center mb-2 leading-relaxed px-3"
-	>
+	<h1 class="text-6xl font-bold text-center mb-2 leading-relaxed px-3">
 		Error!
 	</h1>
 	<span class="text-[#fffa] text-lg text-center px-3">
