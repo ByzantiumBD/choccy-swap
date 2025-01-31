@@ -52,7 +52,7 @@
 		<PoolStats id={data.id} />
 		<a
 			href="/swap?in={data.id}"
-			class="bgblur p-5 bg-[#ed32bf88] border-2 border-[#ed32bf] text-white font-bold text-xl allcenter clickable self-stretch my-5 rounded-3xl"
+			class="bgblur p-5 bg-[#c54b8c88] border-2 border-[var(--mulberry)] text-white font-bold text-xl allcenter clickable self-stretch my-5 rounded-3xl"
 		>
 			Open on Swap Page
 		</a>

@@ -28,7 +28,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div style:width={smallScreen ? "1em":"2.75em"} class="section relative h-[100px] text-[#fff8] text-sm">
+<div style:width={smallScreen ? "1em":"2.75em"} class="section relative h-[100px] text-[var(--transparent)] text-sm">
     <div class="tvl w-full text-center">
         {order.volume} {order.symbol}
     </div>
@@ -52,14 +52,14 @@
 
 <style lang="less">
 	.bar {
-		background-color: #8eeafc50;
+		background-color: #9dfff966;
 		position: absolute;
 		left: 0;
         bottom: 0;
         width: 100%;
         z-index: -1;
 		&.sell {
-			background-color: #ed32bf50;
+			background-color: #c54b8c66;
 		}
 		&.loading {
 			background-color: #fff2 !important;

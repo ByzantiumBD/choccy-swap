@@ -51,7 +51,7 @@
 >
     <div
         onclick={(e) => e.stopPropagation()}
-        class="allcenter !items-stretch flex-col bg-black rounded-3xl border-gray-600 border w-[400px] max-[450px]:w-[350px]"
+        class="allcenter !items-stretch flex-col bg-black rounded-3xl border-[var(--border)] border w-[400px] max-[450px]:w-[350px]"
         >
 		<div class="allcenter !justify-between p-5 text-sm">
 			<h2 class="font-extrabold text-xl">Account Info</h2>
@@ -72,11 +72,11 @@
             </div>
             <div class="flex mx-5 mt-3 mb-5">
                 {#if !hideMinter}
-                    <button onclick={getBalance} class="flex-1 mr-3 blackbutton clickable" >
+                    <button onclick={getBalance} class="flex-1 mr-3 clickable lilacborder py-2 px-7 font-semibold" >
                         {getFundsText}
                     </button>
                 {/if}
-                <button onclick={disconnect} class="flex-1 pinkbutton clickable" >
+                <button onclick={disconnect} class="flex-1 clickable pinkpill py-2 px-7 font-semibold" >
                     Disconnect
                 </button>
             </div>
@@ -85,23 +85,11 @@
 </div>
 
 <style lang="less">
-	.pinkbutton {
-		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
-		border-radius: 32px;
-		border: 2.34px solid #b5178e;
-		padding: 0.375rem 1.75rem;
-        font-weight: bolder;
-
+	.pinkpill {
+		border: 2.5px solid var(--mulberry);
 		&:hover {
-			border: 2.34px solid rgba(255, 255, 255, 0.326);
+			border: 2.5px solid var(--pink);
 		}
-	}
-	.blackbutton {
-		background: transparent;
-		border-radius: 32px;
-		border: 2.34px solid #b5178e;
-		padding: 0.375rem 1.75rem;
-        font-weight: bolder;
 	}
 
     h3 {
@@ -109,10 +97,10 @@
         text-decoration-thickness: 2px;
 
         &.chr {
-            text-decoration-color: #ed32bf;
+            text-decoration-color: var(--mulberry);
         }
         &.evm {
-            text-decoration-color: #8eeafc;
+            text-decoration-color: var(--blue);
         }
     }
 </style>

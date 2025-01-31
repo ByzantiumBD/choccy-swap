@@ -29,7 +29,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	{onclick}
-	class="flex clickable poolentry mb-2 rounded-3xl items-center p-5 {loading ? "text-[#fff8]":"text-white"} text-xl w-full"
+	class="flex clickable poolentry mb-2 rounded-3xl items-center p-5 {loading ? "text-[var(--transparent)]":"text-white"} text-xl w-full"
 >
 	<div class="identifier flex items-center overflow-hidden text-ellipsis flex-[1_1_0.25rem]">
 		<Tokenimg class="mr-4 w-[45px] h-[45px]" src={pair.asset1.iconUrl} alt="logo" />
@@ -56,13 +56,13 @@
 <style lang="less">
 	.poolentry {
 		backdrop-filter: blur(500px);
-		border: solid #1a1a1a 2px;
+		border: solid var(--dark-gray) 2px;
 		position: relative;
 		text-align: center;
 		transition: transform 0.25s ease, filter 0.25s ease;
 		&:hover {
-			background-image: linear-gradient(to right, #ff02d188 0, #8eeafc88 100%);
-			border-color: #fff8;
+			background-image: linear-gradient(to right, #c54b8c88 0, #9dfff988 100%);
+			border-color: var(--transparent);
 		}
 	}
 	.name {

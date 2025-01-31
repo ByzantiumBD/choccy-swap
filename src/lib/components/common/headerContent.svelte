@@ -26,30 +26,22 @@
 		</button>
 		<Walletconnector />
 	{:else}
-		<a href="/swap" class="clickable pinkbutton py-1.5 px-7 font-semibold"> Swap Now </a>
+		<a href="/swap" class="clickable pinkbutton py-2 px-7 font-semibold pinkpill"> Swap Now </a>
 	{/if}
 </div>
 
 <style lang="less">
-	.pinkbutton:hover {
-		border: 2.34px solid #b5178e !important;
-	}
-
-	.pinkbutton {
-		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
-		border-radius: 32px;
-		backdrop-filter: blur(5.538px);
-		border: 2.34px solid #b5178e;
-
+	.pinkpill {
+		border: 2.5px solid var(--mulberry);
 		&:hover {
-			border: 2.34px solid rgba(255, 255, 255, 0.326);
+			border: 2.5px solid var(--pink);
 		}
 	}
 
 	.promode {
 		border-radius: 32px;
-		border: 2.34px solid #ed32bf;
-		padding: 0.375rem 1.5rem;
+		border: 2.34px solid #b57edc;
+		padding: 8px 28px;
 		display: flex;
 		&.clicked {
 			padding: 0.375rem 1.25rem;

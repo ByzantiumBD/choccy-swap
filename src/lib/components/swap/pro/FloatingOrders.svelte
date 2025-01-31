@@ -10,6 +10,7 @@
 		getOtherSideOrder,
 		getPriceLabel,
 		placeOrder,
+		readablePriceFromPair,
 		stringFromGtvPrice,
 		stringPriceFromPair
 	} from '$lib/states/swap/order-state-interactions.svelte';
@@ -37,17 +38,7 @@
 
 <div class="widecenter max-[900px]:flex-col">
 	<div class="flex-1 flex items-stretch justify-start flex-col pb-[1rem]">
-		<div class="ml-5 mt-3 text-2xl">{orderData.isBuy ? 'Buy' : 'Sell'}</div>
-		<!-- Inputs -->
-
-		<OrderAmountInput />
-		<OrderPriceInput />
-
-		<ProSettings isOrders />
-	</div>
-
-	<div class="flex-1 widecenter flex-col">
-		<div class="flex justify-around mx-5 rounded bg-[#fff2] mt-5">
+		<div class="flex justify-around mx-5 rounded bg-[#fff2] mt-5 mb-3">
 			<button
 				class="liquidity_buttons {orderData.isBuy ? 'selected' : ''}"
 				onclick={() => (orderData.isBuy = true)}
@@ -61,44 +52,71 @@
 				Sell
 			</button>
 		</div>
+		<!-- Inputs -->
 
-		<div class="my-3 mx-6 flex-col">
-			<div class="text-sm text-[#fff8] flex justify-between">
-				<span>
-					Current Price: {swapData.pair1
-						? stringPriceFromPair(swapData.pair1, orderData.inverted)
-						: 'N/A'}
+		<OrderAmountInput />
+		<OrderPriceInput />
+	</div>
+
+	<div class="flex-1 widecenter flex-col">
+		<ProSettings isOrders />
+
+		<div
+			class="my-3 mx-6 flex flex-col border border-[var(--border)] rounded-3xl p-6 text-lg font-medium"
+		>
+			<span class="flex items-center">
+				<span>Current Price: </span>
+				<span class="ml-auto text-lg font-medium">
+					{#if swapData.pair1}
+						<ReadablePrice {...readablePriceFromPair(swapData.pair1, orderData.inverted)} />
+					{:else}
+						N/A
+					{/if}
+				</span>
+				{getPriceLabel()}
+			</span>
+
+			<span class="flex items-center mt-2">
+				<span>Order Price: </span>
+				<span class="ml-auto text-lg font-medium flex">
+					<ReadablePrice
+						{...makeStringValueReadablePrice(
+							stringFromGtvPrice(
+								orderData.price,
+								orderData.inverted,
+								getDecimalsDiff(swapData.pair1)
+							)
+						)}
+					/>
 					{getPriceLabel()}
 				</span>
-				<span>
-					Order Price: {stringFromGtvPrice(orderData.price, orderData.inverted, getDecimalsDiff(swapData.pair1))}
-					{getPriceLabel()}
-				</span>
-			</div>
+			</span>
+
 			{#if swapData.token1 && swapData.token2}
-				<div class="flex mt-2 text-sm text-[#fff8]">
+				<div class="flex mt-2 text-lg text-white">
 					<span class="mr-1">{orderData.isBuy ? 'Buy ' : 'Sell '}</span>
-					<ReadablePrice fontSize={.875} {...makeStringValueReadablePrice(orderData.input1.toString())} />
+					<ReadablePrice
+						fontSize={1.125}
+						{...makeStringValueReadablePrice(orderData.input1.toString())}
+					/>
 					<span class="mx-1">{swapData.token1.asset.symbol} for</span>
-					<ReadablePrice fontSize={.875} {...makeStringValueReadablePrice(getOtherSideOrder().toString())} />
+					<ReadablePrice
+						fontSize={1.125}
+						{...makeStringValueReadablePrice(getOtherSideOrder().toString())}
+					/>
 					<span class="ml-1 mr-auto">{swapData.token2.asset.symbol}</span>
 				</div>
 			{/if}
-			<div class="text-sm text-[#fff8]">
-				<br/>
-				<br/>
-				order: 
-				{shortenNumber(""+Number(orderData.price)/Number(PRICE_PRECISION)) + ' $/CCY'}
-				<br/>
-				current: 
-				{shortenNumber(""+Number(swapData.pair1?.amount1 ?? 0)/Number(swapData.pair1?.amountCcy ?? 1)) + ' $/CCY'}
-			</div>
 		</div>
-		<div class="flex justify-center mt-auto mb-6 mx-3 text-[#1a1a1a]">
+		<div class="flex justify-center my-6 mx-5 text-white">
 			{#if !connectionState.session}
 				<Walletconnector />
 			{:else}
-				<button {onclick} disabled={!canPlace} class="clickable gradientbutton p-3 rounded-3xl grow">
+				<button
+					{onclick}
+					disabled={!canPlace}
+					class="clickable gradientbutton p-3 rounded-3xl grow"
+				>
 					Place Order
 				</button>
 			{/if}
@@ -108,21 +126,22 @@
 
 <style>
 	.liquidity_buttons {
-		color: #fff8;
+		color: var(--transparent);
 		font-size: large;
 		flex: 1 0 1px;
-		padding: 3px 0;
+		padding: 4px 3px;
 		&.selected {
 			color: white;
-			background-color: #ed32bf;
+			padding: 4px 3px;
+			background-color: var(--mulberry);
 			border-radius: 0.25rem;
 		}
 	}
 	.gradientbutton {
-		background: linear-gradient(to right, #ff02d1 0, #8eeafc 100%);
+		background: linear-gradient(to right, var(--mulberry) 0, var(--blue) 100%);
 		&:disabled {
 			background: linear-gradient(to right, #fff1 0, #fff2 100%);
-			color: #fff8;
+			color: var(--transparent);
 		}
 	}
 </style>

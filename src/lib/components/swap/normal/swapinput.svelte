@@ -13,7 +13,7 @@
 	};
 
 	let { isInput }: Props = $props();
-	let tkInfo = $derived(isInput? swapData.token1 : swapData.token2);
+	let tkInfo = $derived(isInput ? swapData.token1 : swapData.token2);
 	let text = $state('');
 
 	let inputManager = getInputManager(isInput);
@@ -28,18 +28,18 @@
 	}
 
 	$effect(() => {
-		const newText = inputManager.effect(untrack(() => text)) 
+		const newText = inputManager.effect(untrack(() => text));
 		if (newText !== undefined) {
 			text = newText;
 		}
 	});
 
 	async function oninput(e: Event & { currentTarget: HTMLInputElement }) {
-		e.currentTarget.value = await inputManager.oninput(e.currentTarget.value)
+		e.currentTarget.value = await inputManager.oninput(e.currentTarget.value);
 	}
 
 	function setBalance(percent: number) {
-		inputManager.setBalance(tkInfo?.amountOwned, percent)
+		inputManager.setBalance(tkInfo?.amountOwned, percent);
 	}
 </script>
 
@@ -50,7 +50,9 @@
 		</span>
 		<button
 			onclick={() => openTokens()}
-			class="{connectionState.loading? "disabled" : ""} clickable allcenter bg-[#101010] rounded-full mt-1 py-2 px-3 font-bold border border-gray-600"
+			class="{connectionState.loading
+				? 'disabled'
+				: ''} clickable allcenter bg-[var(--black)] rounded-full mt-1 py-2 px-3 font-bold border border-[var(--border)]"
 		>
 			{#if tkInfo?.asset !== undefined}
 				<Tokenimg
@@ -71,26 +73,18 @@
 	</div>
 	<div class="flex flex-col items-end">
 		{#if connectionState.session}
-			<div class="flex text-[#fff8] text-sm">
-				<button onclick={() => setBalance(25)} class="clickable mr-2">
-					25%
-				</button>
-				<button onclick={() => setBalance(50)} class="clickable mr-2">
-					50%
-				</button>
-				<button onclick={() => setBalance(75)} class="clickable mr-2">
-					75%
-				</button>
-				<button onclick={() => setBalance(100)} class="clickable">
-					100%
-				</button>
+			<div class="flex text-[var(--transparent)] text-sm">
+				<button onclick={() => setBalance(25)} class="clickable mr-2"> 25% </button>
+				<button onclick={() => setBalance(50)} class="clickable mr-2"> 50% </button>
+				<button onclick={() => setBalance(75)} class="clickable mr-2"> 75% </button>
+				<button onclick={() => setBalance(100)} class="clickable"> 100% </button>
 			</div>
 		{/if}
 		<input
 			onclick={(e) => e.currentTarget.select()}
 			type="text"
 			placeholder="0.00"
-			class={connectionState.loading? "disabled" : ""}
+			class={connectionState.loading ? 'disabled' : ''}
 			{oninput}
 			bind:value={text}
 		/>
@@ -104,9 +98,8 @@
 
 <style lang="less">
 	.swapinput {
-		background-color: #b5178e30;
-		border: 2px solid #ed32bf30;
-		position: relative;
+		background-color: #c54b8c55;
+		border: 2.5px solid #c54b8c;
 		width: 80vw;
 		max-width: 600px !important;
 		display: flex;

@@ -77,6 +77,6 @@
 		border-radius: 60cm;
 		border: solid 1px transparent;
 		background: linear-gradient(to right, #101010 0%, #101010 100%) padding-box,
-		linear-gradient(to right, #ed32bf 0%, #8eeafc 100%) border-box;
+		linear-gradient(to right, var(--mulberry) 0%, var(--blue) 100%) border-box;
 	}
 </style>

@@ -11,12 +11,13 @@
 	import { connectionState } from '$lib/states/shared/connection-state.svelte';
 	import { updateInputs } from '$lib/states/swap/swap-state-interactions.svelte';
 	type Props = {
-		close: () => void,
-		isHidden: boolean,
-		isInput: boolean,
-	}
+		close: () => void;
+		isHidden: boolean;
+		isInput: boolean;
+		pos0?: boolean;
+	};
 
-	let { close, isHidden, isInput }: Props = $props();
+	let { close, isHidden, isInput, pos0 = false }: Props = $props();
 
 	let connection: Connection | undefined = $state(undefined);
 
@@ -87,33 +88,31 @@
 	onclick={close}
 	class="{isHidden
 		? '!hidden'
-		: ''} bg-[#0008] z-10 text-white absolute top-0 left-0 w-screen h-screen allcenter"
+		: ''} bg-[#0008] z-10 text-white absolute {pos0 ? 'top-0 left-0' : ''} w-screen h-screen allcenter"
 >
 	<div
 		onclick={(e) => e.stopPropagation()}
-		class="allcenter !items-stretch flex-col bg-black rounded-3xl border-gray-600 border w-[400px] mx-2 max-[450px]:w-[350px]"
+		class="allcenter !items-stretch flex-col bg-black rounded-3xl border-[var(--border)] border w-[400px] mx-2 max-[450px]:w-[350px]"
 	>
 		<div class="allcenter !justify-between p-5 text-sm">
 			<h2 class="font-extrabold text-xl">Select Token</h2>
-			<button onclick={close}><CloseSvg style="width:28px; height:28px; fill:#ff9ced" /></button>
+			<button onclick={close}><CloseSvg style="width:28px; height:28px; fill:var(--pink)" /></button
+			>
 		</div>
 
 		<div
-			class="allcenter h-full rounded-b-3xl text-gray-400 bg-[#101010] flex-col !items-stretch pt-6"
+			class="allcenter h-full rounded-b-3xl text-[var(--transparent)] bg-[var(--black)] flex-col !items-stretch pt-6"
 		>
 			<Searchbox bind:query={search} bind:filtered bind:focus={focusSearch} />
 
-			<div
-				id="pillscroll"
-				class="flex flex-row items-center space-x-2 mx-5 py-3 overflow-x-scroll"
-			>
+			<div id="pillscroll" class="flex flex-row items-center space-x-2 mx-5 py-3 overflow-x-scroll">
 				{#each pillAssets as asset}
 					<Tokenpill {selectToken} {asset} />
 				{/each}
 			</div>
 			<div
 				id="token-nav-buttons"
-				class="allcenter mt-3 !justify-around text-sm font-semibold text-[#fff8]"
+				class="allcenter mt-3 !justify-around text-sm font-semibold text-[var(--transparent)]"
 			>
 				<button bind:this={name} class="roadmap-buttons selected">Name</button>
 				<button bind:this={symbol} class="roadmap-buttons">Ticker</button>
@@ -141,7 +140,7 @@
 		padding: 0 0.5rem 0.1rem 0.5rem;
 		&.selected {
 			color: #fff;
-			border-bottom: solid #ed32bf 3px;
+			border-bottom: solid var(--mulberry) 3px;
 		}
 	}
 </style>

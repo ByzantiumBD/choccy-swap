@@ -22,10 +22,10 @@
 </script>
 
 <div
-	style="--width:{order?.width ?? 0}%;--color:{!sell ? '#8eeafc88' : '#ed32bf88'};--right:{sell
+	style="--width:{order?.width ?? 0}%;--color:{!sell ? '#9dfff988' : '#c54b8c88'};--right:{sell
 		? '0'
 		: ''};--left:{sell ? '' : '0'};"
-	class="{loading ? 'text-[#fff8]' : ''} orders {sell
+	class="{loading ? 'text-[var(--transparent)]' : ''} orders {sell
 		? ''
 		: 'flex-row-reverse'} flex items-center justify-around text-lg py-4"
 >

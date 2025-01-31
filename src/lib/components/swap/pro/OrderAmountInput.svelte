@@ -21,14 +21,14 @@
 	}
 </script>
 
-<div class="bg-[#ed32bf55] border-2 border-[#ed32bf88] rounded-2xl m-3 flex p-3">
+<div class="bg-[#c54b8c55] border-2 border-[#c54b8c88] rounded-3xl my-3 mx-5 flex p-5">
 	<div class="flex-[2_0_1px] flex flex-col">
-		<span class="text-base">{swapData.token1?.asset.name ?? 'Select a token'}</span>
+		<span class="text-lg">{swapData.token1?.asset.name ?? 'Select a token'}</span>
 		<input {oninput} bind:value={textIn} placeholder="0.00" />
 	</div>
 	<div class="flex-[1_0_1px] flex flex-col items-end justify-center">
-		<span class="text-base text-[#fff8]">Balance: {makeNumberReadable(balance.toString())}</span>
-		<span class="text-base text-[#fff8]">{makeNumberReadable(balance.toString())}$</span>
+		<span class="text-lg font-light text-[var(--transparent)]">Balance: {makeNumberReadable(balance.toString())}</span>
+		<span class="text-lg font-light text-[var(--transparent)]">{makeNumberReadable(balance.toString())}$</span>
 	</div>
 </div>
 
@@ -36,9 +36,10 @@
 	input {
 		all: unset;
 		font-size: xx-large;
+		font-weight: 400;
 		width: 100%;
 		&::placeholder {
-			color: #fff8;
+			color: var(--transparent);
 		}
 	}
 </style>

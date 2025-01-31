@@ -10,7 +10,7 @@
 	import { swap, switchTokens } from '$lib/states/swap/swap-state-interactions.svelte';
 	import ReadablePrice from '$lib/components/common/readablePrice.svelte';
 
-	let { success }: { success: (msg: string, link: string) => ()=>void } = $props();
+	let { success }: { success: (msg: string, link: string) => () => void } = $props();
 
 	let isSettingsHidden = $state(true);
 
@@ -34,10 +34,9 @@
 </script>
 
 <div
-	id="mainbox"
-	class="allcenter flex-col min-w-[600px]:w-[600px] mx-2 border border-gray-600 rounded-3xl my-[3cm] py-5 text-white"
+	class="allcenter flex-col min-w-[600px]:w-[600px] bg-[#1a1a1a88] boxblur mx-2 rounded-3xl my-[3cm] text-white"
 >
-	<div class="allcenter !justify-between w-full px-6">
+	<div class="allcenter !justify-between bg-black rounded-t-3xl w-full px-6 py-5">
 		<h1 class="text-3xl font-extrabold">Swap</h1>
 		<button onclick={openSettings} class="clickable w-[30px]">
 			<img src={cog} alt="slippage menu" /></button
@@ -49,12 +48,9 @@
 
 		<div
 			id="switch-background"
-			class="absolute allcenter bg-[#303030] w-[2cm] h-[2cm] rounded-full border-[#682c5a] border-2"
+			class="absolute allcenter bg-[#252830] boxblur w-[2cm] h-[2cm] rounded-full border-[#c54b8c] border-2"
 		>
-			<button
-				onclick={switchTokens}
-				class="bg-[#101010] clickable w-[1.5cm] h-[1.5cm] rounded-full"
-			>
+			<button onclick={switchTokens} class="allcenter clickable w-[1.5cm] h-[1.5cm] rounded-full">
 				<img src={switcharrow} alt="switch" />
 			</button>
 		</div>
@@ -67,10 +63,16 @@
 			<div class="flex justify-between max-[730px]:flex-col">
 				<span class="flex">
 					Swap
-					<ReadablePrice class="mx-1" {...makeStringValueReadablePrice(swapData.input1.toString())}/>
+					<ReadablePrice
+						class="mx-1"
+						{...makeStringValueReadablePrice(swapData.input1.toString())}
+					/>
 					{swapData.token1?.asset.symbol}
 					for
-					<ReadablePrice class="mx-1" {...makeStringValueReadablePrice(swapData.input2.toString())}/>
+					<ReadablePrice
+						class="mx-1"
+						{...makeStringValueReadablePrice(swapData.input2.toString())}
+					/>
 					{swapData.token2?.asset.symbol}
 				</span>
 				<span class={swapData.impact > 10 ? 'danger' : ''}>Price Impact: {swapData.impact}%</span>
@@ -82,18 +84,17 @@
 		</div>
 	{/if}
 
-	<div class="flex items-stretch justify-stretch w-full px-4 mt-3">
+	<div class="flex items-stretch justify-stretch w-full p-4 mt-3">
 		{#if connectionState.session}
 			<button
 				onclick={swapClick}
-				id="swapbutton"
 				disabled={!canSwap}
-				class="grow clickable p-3 rounded-full text-xl font-extrabold"
+				class="swapbutton grow clickable p-3 rounded-full text-xl font-extrabold gradientbutton"
 			>
 				Swap
 			</button>
 		{:else}
-			<Walletconnector style="padding:0.75rem;font-size:1.25rem;font-weight:bolder" />
+			<Walletconnector style="padding:0.75rem;font-size:1.25rem;font-weight:bolder;flex-grow:1" />
 		{/if}
 	</div>
 </div>
@@ -101,17 +102,11 @@
 <Settings close={closeSettings} isHidden={isSettingsHidden} />
 
 <style>
-	#mainbox {
-		background-image: radial-gradient(#303030 0, #303030 2cm, #101010);
+	.swapbutton:disabled {
+		background: linear-gradient(to right, #fff1 0, #fff2 100%);
+		color: var(--transparent);
 	}
 
-	#swapbutton {
-		background: linear-gradient(to right, #ff02d1 0, #8eeafc 100%);
-	}
-	#swapbutton:disabled {
-		background: linear-gradient(to right, #fff1 0, #fff2 100%);
-		color: #fff8;
-	}
 	#switch-background {
 		--top: calc(50% - 0.25rem);
 		--bottom: calc(50% + 0.25rem);
@@ -137,7 +132,8 @@
 	}
 
 	span.danger {
-		color: #ed32bf;
+		color: var(--mulberry);
 		opacity: 90%;
 	}
 </style>
+

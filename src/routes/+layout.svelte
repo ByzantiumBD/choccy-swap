@@ -1,9 +1,8 @@
 <script lang="ts">
 	import Background from '$lib/components/common/background.svelte';
 	import '@fontsource/roboto';
-	import '../app.css';
+	import '../app.less';
 	import { page } from '$app/state';
-	import Footer from '$lib/components/home/footer.svelte';
 	import Header from '$lib/components/common/header.svelte';
 	import { onMount } from 'svelte';
 	import { connect } from '$lib/interactions/connection';
@@ -11,12 +10,10 @@
 
 	let { children } = $props();
 
-	let isSwap = $derived(page.url.pathname.match(/swap/i) !== null);
-	let isHome = $derived(page.url.pathname === "/");
+	let isSwap = $derived(page.url.pathname === "/");
 	let loading = $state(false)
 
 	onMount(async () => {
-		if (!isHome) loading = true;
 		await connect()
 		loading = false;
 	})
@@ -32,8 +29,4 @@
 			{@render children()}
 		{/if}
 	</Background>
-
-	{#if isHome}
-		<Footer/>
-	{/if}
 </div>

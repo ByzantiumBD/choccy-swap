@@ -1,5 +1,5 @@
 import { calcPrice, PRICE_PRECISION } from '$lib/interactions/swaps';
-import { removeTrailingZeros, shortenNumber } from '$lib/number-utils';
+import { makeStringValueReadablePrice, numToString, removeTrailingZeros, shortenNumber } from '$lib/number-utils';
 import { orderData } from './swap-states.svelte';
 import { getId, isCcy } from '$lib/utils';
 import { swapData } from './swap-states.svelte';
@@ -40,6 +40,15 @@ export function stringPriceFromPair(pair: Pair, inverted: boolean) {
 		getDecimalsDiff(pair)
 	);
 	return removeTrailingZeros(shortenNumber(priceCcy.toString()));
+}
+
+export function readablePriceFromPair(pair: Pair, inverted: boolean) {
+	const priceCcy = fromGtvPrice(
+		calcPrice(pair.amount1, pair.amountCcy),
+		inverted,
+		getDecimalsDiff(pair)
+	);
+	return makeStringValueReadablePrice(numToString(priceCcy));
 }
 
 /**

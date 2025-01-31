@@ -47,7 +47,7 @@
 	});
 </script>
 
-<div class="flex justify-center items-stretch self-stretch mx-5 my-3 relative">
+<div class="flex justify-center items-stretch self-stretch mx-5 my-5 relative">
 	<div class="chart buy">
 		{#each buys as buy}
 			<OrderProEntry order={buy} {loading} />
@@ -65,7 +65,7 @@
 	.chart {
 		flex: 1 0 1px;
 		display: flex;
-		border-bottom: solid 1px #fff8;
+		border-bottom: solid 1px var(--transparent);
 		&.buy {
 			flex-direction: row-reverse;
 		}
@@ -76,6 +76,6 @@
 		left: 50%;
 		width: 1px;
 		height: 10px;
-		background-color: #fff8;
+		background-color: var(--transparent);
 	}
 </style>

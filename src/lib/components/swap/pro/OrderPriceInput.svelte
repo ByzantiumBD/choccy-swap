@@ -59,33 +59,33 @@
 	});
 </script>
 
-<div class="{!isPriceValid() && 'invalid'} inputbox rounded-2xl m-3 mb-5 flex p-3">
+<div class="{!isPriceValid() && 'invalid'} inputbox rounded-3xl my-3 mx-5 flex p-5">
 	<div class="flex-[2_0_1px] flex flex-col">
-		<span class="text-base">{'Price'}</span>
+		<span class="text-lg">{'Price'}</span>
 		<input {oninput} bind:value={textPrice} placeholder="0.00" />
 	</div>
 	<div class="flex-[1_0_1px] flex flex-col">
 		{#if swapData.token1 && swapData.token2}
 			<div class="flex justify-end mb-1">
-				<button class="text-sm text-[#fff8] mx-1" onclick={() => setPrice(5)}>
+				<button class="clickable text-sm text-[var(--transparent)] font-semibold mx-1" onclick={() => setPrice(5)}>
 					{!wouldGoUp() ? '+5%' : '-5% '}
 				</button>
-				<button class="text-sm text-[#fff8] mx-1" onclick={() => setPrice(10)}>
+				<button class="clickable text-sm text-[var(--transparent)] font-semibold mx-1" onclick={() => setPrice(10)}>
 					{!wouldGoUp() ? '+10%' : '-10% '}
 				</button>
-				<button class="text-sm text-[#fff8] mx-1" onclick={() => setPrice(25)}>
+				<button class="clickable text-sm text-[var(--transparent)] font-semibold mx-1" onclick={() => setPrice(25)}>
                     {!wouldGoUp() ? '+25%' : '-25% '}
 				</button>
-				<button class="text-sm text-[#fff8] mx-1" onclick={() => setPrice(50)}>
+				<button class="clickable text-sm text-[var(--transparent)] font-semibold mx-1" onclick={() => setPrice(50)}>
 					{!wouldGoUp() ? '+50%' : '-50%'}
 				</button>
 			</div>
 			<button
-				class="flex flex-col items-end text-xl text-[#fff8] self-end"
+				class="flex flex-col items-end text-xl font-medium text-[var(--transparent)] self-end"
 				onclick={invertPrice}
 			>
 				<div>{getPriceLabel()}</div>
-				<div class="text-xs text-[#fff8]">click to invert</div>
+				<div class="text-xs text-[var(--transparent)] font-semibold mt-1">click to invert</div>
 			</button>
 		{/if}
 	</div>
@@ -103,27 +103,29 @@
 	input {
 		all: unset;
 		font-size: xx-large;
+		font-weight: 400;
 		width: 100%;
 		&::placeholder {
-			color: #fff8;
+			color: var(--transparent);
 		}
 	}
 	.inputbox {
 		position: relative;
-		background-color: #ed32bf55;
-		border: 2px solid #ed32bf88;
+		margin-bottom: 2rem;
+		background-color: #c54b8c55;
+		border: 2px solid #c54b8c88;
 		& .warning {
 			display: none;
 			position: absolute;
 			bottom: -2rem;
 			right: 0;
 			& div {
-				color: #ed32ba;
+				color: #c54b66;
 			}
 		}
 		&.invalid {
-			background-color: #ed328055;
-			border-color: #ed328088;
+			background-color: #c54b6688;
+			border-color: #c54b66;
 			& .warning {
 				display: flex;
 			}

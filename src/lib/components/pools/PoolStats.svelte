@@ -63,27 +63,27 @@
 		<span class="text-lg opacity-50 mr-4">({p.asset1.symbol})</span>
 	</div>
 
-	<hr class="border-1 border-gray-600 mx-3" />
+	<hr class="border-1 border-[var(--border)] mx-3" />
 
 	<div class="flex flex-col items-start justify-center p-3 ml-4">
-		<span class="gradientbutton py-1 px-3 my-2 text-sm"> Address</span>
+		<span class="gradient bordered py-1 px-3 my-2 text-sm"> Address</span>
 		<Linkid id={p.asset1.id} buttonOrLinkClass="ml-3 text-xl"
 				imgClass="w-[20px]"/>
 
-		<span class="gradientbutton py-1 px-3 my-2 text-sm"> TVL</span>
+		<span class="gradient bordered py-1 px-3 my-2 text-sm"> TVL</span>
 		<span class="ml-3 text-3xl font-extrabold flex items-end">
 			{getReadableTvlCcy(p)}
 			<span class="opacity-50 text-base ml-1">CCY</span>
 		</span>
 
-		<span class="gradientbutton py-1 px-3 my-2 text-sm"> Price</span>
+		<span class="gradient bordered py-1 px-3 my-2 text-sm"> Price</span>
 		<span class="ml-3 text-3xl font-extrabold flex items-end">
 			<ReadablePrice {...getReadablePriceInCcy(p)} fontSize={1.875} />
 			<span class="opacity-50 text-base ml-1">CCY</span>
 		</span>
 
 		<div class="flex items-center">
-			<span class="gradientbutton py-1 px-3 my-2 text-sm"> LP Address</span>
+			<span class="gradient bordered py-1 px-3 my-2 text-sm"> LP Address</span>
 			<img class="w-[27px] h-[27px] ml-2" src="https://www.choccyswap.com/logo_lp.svg" alt="lp token"/>
 		</div>
 		
@@ -95,15 +95,5 @@
 <style>
 	.pool_infos {
 		backdrop-filter: blur(15px);
-	}
-
-	.gradientbutton {
-		background: linear-gradient(90deg, #ff02d1 0, #8eeafc 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-
-		border: 1px solid rgba(255, 156, 237, 0.4);
-		border-radius: 60px;
 	}
 </style>

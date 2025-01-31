@@ -28,7 +28,7 @@
 	}
 </script>
 
-<div class="flex self-stretch flex-col mt-10 text-white">
+<div class="flex self-stretch flex-col mt-20 text-white">
 	<Topbar />
 	<div class="grow flex px-3 max-[1000px]:flex-col">
 		<div class="rounded-3xl grow mr-3 allcenter bg-[#0008] boxblur">
@@ -40,7 +40,7 @@
 
 	<div class="floatings my-3 w-full items-stretch text-xl font-semibold justify-around">
 		<div class="floating">
-			<div class="bg-black rounded-t-3xl py-3 px-5">
+			<div class="bg-black rounded-t-3xl py-4 px-5">
 				<div class="flex items-stretch justify-stretch">
 					<button class="flex-grow {selectedTab === SWAP ? 'active' : ''}" onclick={() => setActive(SWAP)}>
 						<span>Swap</span>
@@ -65,17 +65,15 @@
 </div>
 
 <style>
-	.boxblur {
-		backdrop-filter: blur(15px);
-	}
 	.floating {
-		background-color: #1a1a1a;
+		background-color: #1a1a1a88;
+		backdrop-filter: blur(15px);
 		border-radius: 2rem;
 		margin: 0 0.75rem;
 	}
 	.active {
 		text-decoration: underline;
-		text-decoration-color: #ed32bf;
+		text-decoration-color: var(--mulberry);
 		text-underline-offset: 0.5rem;
 		text-decoration-thickness: 3px;
 	}

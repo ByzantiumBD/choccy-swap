@@ -1,6 +1,5 @@
 <script lang="ts">
-	import logo from '$lib/images/common/logo.svg';
-	import writing from '$lib/images/common/writing.svg';
+	import logo from '$lib/images/common/xchoccy_wt_top.svg';
 	import menu from '$lib/images/common/menu.svg';
 	import HeaderContent from './headerContent.svelte';
 
@@ -26,7 +25,6 @@
 		<div id="header-content" class="allcenter max-w-[1200px] w-full">
 			<a href="/" id="brand" class="allcenter">
 				<img src={logo} alt="logo" class="h-[50px]" />
-				<img src={writing} alt="choccyswap" class="h-[30px] px-3" />
 			</a>
 			<div class="max-[779px]:hidden allcenter ml-auto">
 				<HeaderContent {isSwap} close={() => setMenu(false)} />
@@ -80,7 +78,7 @@
 			width: 100%;
 			height: 100%;
 			z-index: -1;
-			background-color: #ed32bf22;
+			background-color: #c54b8c22;
 			border-radius: 5mm;
 			backdrop-filter: blur(5.538px);
 		}

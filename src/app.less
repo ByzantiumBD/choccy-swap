@@ -1,0 +1,85 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+#header-content #topbarmenu.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+* {
+    --mulberry: #c54b8c;
+    --lilac: #b57edc;
+    --dark-gray: #1a1a1a;
+    --pink: #ff9ced;
+    --blue: #9dfff9;
+    --black: #101010;
+    --transparent: #fff8;
+    --text-transparent: #fff6;
+    --border: #fff4;
+    font-family: sans-serif;
+}
+
+.allcenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.widecenter {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.clickable {
+    transition: all 0.25s ease;
+    filter: brightness(1);
+    transform: scale(1);
+
+    &:active {
+        transform: scale(0.95);
+        filter: brightness(0.7)
+    }
+}
+
+.boxblur {
+    backdrop-filter: blur(15px);
+}
+
+.pill {
+    background: linear-gradient(to right, var(--mulberry) 0%, var(--lilac) 100%);
+    border-radius: 100cm;
+    color: white;
+}
+
+.gradientbutton {
+    background: linear-gradient(to right, var(--mulberry) 0, var(--blue) 100%);
+    border-radius: 100cm;
+    color: white;
+}
+
+.pinkpill {
+    background-color: var(--mulberry);
+    border-radius: 100cm;
+    color: white;
+}
+
+.gradient {
+    background: linear-gradient(to right, var(--mulberry) 0%, var(--blue) 100%);
+    border-radius: 100cm;
+    color: transparent;
+    background-clip: text;
+
+    &.bordered {
+        border: 1px solid #c54b8c80;
+    }
+}
+
+.lilacborder {
+    border: 2px solid var(--lilac);
+    border-radius: 100cm;
+    color: white;
+}

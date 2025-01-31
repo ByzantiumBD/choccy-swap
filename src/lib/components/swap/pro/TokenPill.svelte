@@ -16,7 +16,7 @@
     }
 </script>
 
-<button {onclick} class="pill clickable">
+<button {onclick} class="tokenpill clickable">
 	{#if asset}
 		<Tokenimg class="w-[32px] h-[32px] mr-2" src={asset.iconUrl} alt="token" />
 		<span class="text-lg font-bold mr-5">{asset.name}</span>
@@ -26,10 +26,10 @@
 	{/if}
 </button>
 
-<Tokens isInput={input} {close} {isHidden} />
+<Tokens pos0 isInput={input} {close} {isHidden} />
 
 <style>
-	.pill {
+	.tokenpill {
 		backdrop-filter: blur(15px);
 		border: solid 2px transparent;
 		background-color: #0008;
@@ -38,7 +38,7 @@
 		display: flex;
 		align-items: center;
 		&:hover {
-			border-color: #fff5;
+			border-color: var(--border);
 			border-width: 2px;
 		}
 	}

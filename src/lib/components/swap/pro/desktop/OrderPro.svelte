@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Tokenimg from '$lib/components/common/tokenimg.svelte';
+	import arrow from '$lib/images/common/arrowhoriz.svg';
 	import {
 		loadAllOrders,
 		splitAllOrdersInSteps,
@@ -53,30 +54,30 @@
 	});
 </script>
 
-<div class="rounded-3xl flex flex-col bg-[#10101099] boxblur">
-	<h2 class="px-5 py-3 text-2xl font-bold bg-black rounded-t-3xl">OrderBook</h2>
-	<div class="allcenter flex-col text-xl p-5">
+<div class="rounded-3xl flex flex-col bg-[#10101088] boxblur">
+	<h2 class="px-5 py-4 text-2xl font-bold bg-black rounded-t-3xl">OrderBook</h2>
+	<div class="allcenter flex-col text-xl p-6">
 		<div class="allcenter self-stretch mb-5">
-			<h3 class="text-xl font-extrabold mr-auto">Route</h3>
+			<h3 class="text-2xl font-extrabold mr-auto">Route</h3>
 			<Tokenimg class="w-[40px]" src={asset1?.iconUrl ?? ''} />
-			<span class="mx-3">&gt;</span>
+			<img src={arrow} alt="switch" class="w-[35px]" />
 			<Tokenimg class="w-[40px]" src={asset2?.iconUrl ?? ''} />
 			{#if asset3}
-				<span class="mx-3">&gt;</span>
+				<img src={arrow} alt="switch" class="w-[35px]" />
 				<Tokenimg class="w-[40px]" src={asset3?.iconUrl ?? ''} />
 			{/if}
 		</div>
 		<div class="chartbox allcenter flex-col" style="margin-bottom:{(swapData.pair2? 0:180) + (isSwap? 30:0)}px;">
-			<div class="flex items-center justify-start self-stretch">
+			<div class="flex items-center justify-start self-stretch mb-2">
 				<h3 class="text-xl font-extrabold mr-3">Pair 1</h3>
 				<Tokenimg class="w-[30px]" src={asset1?.iconUrl ?? ''} />
-				<span class="mx-3">&gt;</span>
+				<img src={arrow} alt="switch" class="w-[30px]" />
 				<Tokenimg class="w-[30px]" src={asset2?.iconUrl ?? ''} />
 			</div>
 			<OrderProChart orders={orders1} {loading} invert={!isAsset1Ccy}/>
 		</div>
 		{#if !isSwap}
-			<div class="text-sm text-[#fff8] text-center mt-2">
+			<div class="text-sm text-[var(--transparent)] text-center mt-2">
 				Orders and liquidity operations only work on single pair routes
 			</div>
 		{/if}
@@ -86,7 +87,7 @@
 				<div class="flex items-center justify-start self-stretch">
 					<h3 class="text-xl font-extrabold mr-3">Pair 2</h3>
 					<Tokenimg class="w-[30px]" src={asset2?.iconUrl ?? ''} />
-					<span class="mx-3">&gt;</span>
+					<img src={arrow} alt="switch" class="w-[30px]" />
 					<Tokenimg class="w-[30px]" src={asset3?.iconUrl ?? ''} />
 				</div>
 				<OrderProChart orders={orders2} {loading}/>
@@ -96,9 +97,6 @@
 </div>
 
 <style>
-	.boxblur {
-		backdrop-filter: blur(15px);
-	}
 	.chartbox {
 		border: solid 1px #fff8;
 		border-radius: 1.5rem;

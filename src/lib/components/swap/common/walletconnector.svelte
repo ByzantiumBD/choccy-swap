@@ -22,11 +22,11 @@
 </script>
 
 {#if connected}
-    <button {style} onclick={openInfo} class="clickable pinkbutton font-semibold">
+    <button {style} onclick={openInfo} class="clickable pinkpill py-2 px-7 font-semibold">
         Account Info
     </button>
 {:else}
-    <button {style} onclick={connect} class="clickable pinkbutton font-semibold">
+    <button {style} onclick={connect} class="clickable pinkpill py-2 px-7 font-semibold">
         Connect Wallet
     </button>
 {/if}
@@ -36,16 +36,10 @@
 {/if}
 
 <style lang="less">
-	.pinkbutton {
-		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
-		border-radius: 32px;
-		backdrop-filter: blur(5.538px);
-		border: 2.34px solid #b5178e;
-		padding: 0.375rem 1.75rem;
-		flex-grow: 1;
-
+	.pinkpill {
+		border: 2.5px solid var(--mulberry);
 		&:hover {
-			border: 2.34px solid rgba(255, 255, 255, 0.326);
+			border: 2.5px solid var(--pink);
 		}
 	}
 </style>

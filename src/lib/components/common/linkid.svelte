@@ -42,7 +42,7 @@
 
 {#if button}
 	<button {onclick} class="flex {buttonOrLinkClass}">
-		<span class="{spanClass} text-[#fff8]">
+		<span class="{spanClass} text-[var(--transparent)]">
 			{text}
 		</span>
 
@@ -50,7 +50,7 @@
 	</button>
 {:else}
 	<a {href} target="_blank" class="flex {buttonOrLinkClass}">
-		<span class="{spanClass} text-[#fff8]">
+		<span class="{spanClass} text-[var(--transparent)]">
 			{text}
 		</span>
 

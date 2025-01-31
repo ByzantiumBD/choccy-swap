@@ -11,7 +11,7 @@
     </div>
 
     <button onclick={switchTokens}>
-        <img class="w-[50px] rotate-90 mx-3 border-2 border-[#fff5] rounded-full" src={switchImage} alt="switch tokens" />
+        <img class="w-[50px] rotate-90 mx-3 border-2 border-[var(--border)] rounded-full" src={switchImage} alt="switch tokens" />
     </button>
 
     <div class="flex flex-1 min-[781px]:justify-start">

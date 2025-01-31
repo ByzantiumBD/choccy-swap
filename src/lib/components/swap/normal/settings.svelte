@@ -34,14 +34,14 @@
 >
 	<div
 		onclick={(e) => e.stopPropagation()}
-		class="allcenter flex-col bg-black rounded-3xl border-gray-600 border mx-2"
+		class="allcenter flex-col bg-black rounded-3xl border-[var(--border)] border mx-2"
 	>
 		<div class="allcenter !justify-between w-full p-5">
 			<h2 class="font-extrabold text-xl">Settings</h2>
 			<button onclick={close}><CloseSvg style="width:28px; height:28px; fill:#ff9ced" /></button>
 		</div>
 
-		<div class="flex flex-col w-full bg-[#101010] p-5 rounded-b-3xl">
+		<div class="flex flex-col w-full bg-[var(--black)] p-5 rounded-b-3xl">
 			<p class="font-bold mb-3 ml-1">Slippage</p>
 			<div id="slippages" class="allcenter !justify-between grid-cols-3">
 				{#each [0.1, 0.5, 1, 2] as slip}
@@ -66,7 +66,7 @@
 			</div>
 			<div class="allcenter mr-3 mt-4">
 				<p class="font-bold mb-1 ml-1 mr-auto">Deadline</p>
-				<div class="border border-[gray] rounded-3xl py-1 px-2">
+				<div class="border border-[var(--border)] rounded-3xl py-1 px-2">
 					<input type="text" oninput={onDeadlineInput} value={deadlineText}
 						style="width:{2}em;text-align:center;" class="deadline" />
 				</div>
@@ -81,7 +81,7 @@
 		all: unset;
 		width: 4rem;
 		&::placeholder {
-			color: #fff8;
+			color: var(--transparent);
 		}
 		&:focus {
 			outline: none;
@@ -90,12 +90,12 @@
 
 	#slippages > button {
 		padding: 0.25rem 0.8rem;
-		border: solid grey 1px;
+		border: solid var(--border) 1px;
 		border-radius: 1rem;
 		margin: 0 5px 0 5px;
 		&[aria-current=true] {
-			background-color: #ed32bf;
-			border: solid #ed32bf 1px;
+			background-color: var(--mulberry);
+			border: solid var(--mulberry) 1px;
 		}
 	}
 

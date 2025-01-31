@@ -1,18 +1,21 @@
 <script lang="ts">
-	import ReadablePrice from "$lib/components/common/readablePrice.svelte";
-import { calcLpTokensFromAmountInOrOut } from "$lib/interactions/liquidity";
-	import { makeNumberReadable, makeStringValueReadablePrice } from "$lib/number-utils";
-	import { connectionState } from "$lib/states/shared/connection-state.svelte";
-	import { addLiquidity, removeLiquidity } from "$lib/states/swap/liquidity-state-interactions.svelte";
-	import { liquidityData, swapData } from "$lib/states/swap/swap-states.svelte";
-	import { isCcy } from "$lib/utils";
-	import Walletconnector from "../common/walletconnector.svelte";
-	import ProInputs from "./ProInputs.svelte";
+	import ReadablePrice from '$lib/components/common/readablePrice.svelte';
+	import { calcLpTokensFromAmountInOrOut } from '$lib/interactions/liquidity';
+	import { makeNumberReadable, makeStringValueReadablePrice } from '$lib/number-utils';
+	import { connectionState } from '$lib/states/shared/connection-state.svelte';
+	import {
+		addLiquidity,
+		removeLiquidity
+	} from '$lib/states/swap/liquidity-state-interactions.svelte';
+	import { liquidityData, swapData } from '$lib/states/swap/swap-states.svelte';
+	import { isCcy } from '$lib/utils';
+	import Walletconnector from '../common/walletconnector.svelte';
+	import ProInputs from './ProInputs.svelte';
 
-	let { success }: { success: (msg: string, link: string) => ()=>void } = $props();
+	let { success }: { success: (msg: string, link: string) => () => void } = $props();
 
 	let isAdd = $state(true);
-	
+
 	let canAdd = $derived.by(() => {
 		if (!swapData.pair1 || !swapData.token1 || !swapData.token2) return false;
 		const nonZero = liquidityData.input1.value > 0n && liquidityData.input2.value > 0n;
@@ -25,8 +28,8 @@ import { calcLpTokensFromAmountInOrOut } from "$lib/interactions/liquidity";
 			const lpRequired = calcLpTokensFromAmountInOrOut(
 				liquidityData.input1.value,
 				swapData.pair1,
-				isCcy(swapData.token1?.asset),
-			)
+				isCcy(swapData.token1?.asset)
+			);
 			hasBalance = (liquidityData.lpToken?.amountOwned.value ?? 0n) >= lpRequired;
 		}
 		return nonZero && hasBalance;
@@ -43,30 +46,40 @@ import { calcLpTokensFromAmountInOrOut } from "$lib/interactions/liquidity";
 </script>
 
 <div class="widecenter max-[900px]:flex-col">
-	<div class="mt-11 flex-1 flex items-stretch justify-start flex-col pb-[5.5rem]">
+	<div class="flex-1 flex items-stretch justify-start flex-col my-5">
 		<ProInputs addLiquidity={isAdd} liquidity isInput />
 		<ProInputs addLiquidity={isAdd} liquidity />
 	</div>
 
 	<div class="flex-1 widecenter flex-col">
 		<div class="flex justify-around mx-5 rounded bg-[#fff2] mt-5">
-			<button class="liquidity_buttons {isAdd ? 'selected' : ''}" onclick={() => isAdd = true}>
+			<button class="liquidity_buttons {isAdd ? 'selected' : ''}" onclick={() => (isAdd = true)}>
 				Add
 			</button>
-			<button class="liquidity_buttons {isAdd ? '' : 'selected'}" onclick={() => isAdd = false}>
+			<button class="liquidity_buttons {isAdd ? '' : 'selected'}" onclick={() => (isAdd = false)}>
 				Remove
 			</button>
 		</div>
-		<div class="flex mt-5 mx-6 text-sm text-[#fff8]">
+		<div
+			class="flex flex-col mt-5 mx-6 text-lg font-medium text-white border border-[var(--border)] rounded-3xl p-6"
+		>
+			<div class="flex items-center">
 			<span class="mr-1">{isAdd ? 'Add ' : 'Remove '}</span>
-			<ReadablePrice fontSize={.875} {...makeStringValueReadablePrice(liquidityData.input1.toString())} />
+			<ReadablePrice
+				fontSize={1.125}
+				{...makeStringValueReadablePrice(liquidityData.input1.toString())}
+			/>
 			<span class="mx-1">{swapData.token1?.asset.symbol} and</span>
-			<ReadablePrice fontSize={.875} {...makeStringValueReadablePrice(liquidityData.input2.toString())} />
-			<span class="ml-1 mr-auto">{swapData.token2?.asset.symbol}</span>
-			<span class="">Liquidity Share: {makeNumberReadable("" + liquidityData.share * 100)}%</span>
+			<ReadablePrice
+				fontSize={1.125}
+				{...makeStringValueReadablePrice(liquidityData.input2.toString())}
+				/>
+				<span class="ml-1 mr-auto">{swapData.token2?.asset.symbol}</span>
+			</div>
+			<span class="mt-2 text-lg font-medium">Liquidity Share: {makeNumberReadable('' + liquidityData.share * 100)}%</span>
 		</div>
 
-		<div class="flex justify-center mt-auto mb-6 mx-3 text-[#1a1a1a]">
+		<div class="flex justify-center my-6 mx-3 text-white">
 			{#if !connectionState.session}
 				<Walletconnector />
 			{:else}
@@ -80,21 +93,22 @@ import { calcLpTokensFromAmountInOrOut } from "$lib/interactions/liquidity";
 
 <style>
 	.liquidity_buttons {
-		color: #fff8;
+		color: var(--transparent);
 		font-size: large;
 		flex: 1 0 1px;
-		padding: 3px 0;
+		padding: 4px 3px;
 		&.selected {
 			color: white;
-			background-color: #ed32bf;
+			padding: 4px 3px;
+			background-color: var(--mulberry);
 			border-radius: 0.25rem;
 		}
 	}
 	.gradientbutton {
-		background: linear-gradient(to right, #ff02d1 0, #8eeafc 100%);
+		background: linear-gradient(to right, var(--mulberry) 0, var(--blue) 100%);
 		&:disabled {
 			background: linear-gradient(to right, #fff1 0, #fff2 100%);
-			color: #fff8;
+			color: var(--transparent);
 		}
 	}
 </style>

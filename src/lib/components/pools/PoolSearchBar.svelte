@@ -7,7 +7,7 @@
 	let input: HTMLInputElement | undefined = $state(undefined);
 
 	function onclick() {
-		if (input) input.focus()
+		if (input) input.focus();
 	}
 
 	function oninput(e: Event & { currentTarget: HTMLInputElement }) {
@@ -15,8 +15,8 @@
 	}
 
 	onMount(() => {
-		if (poolsData.query && input) input.value = poolsData.query
-	})
+		if (poolsData.query && input) input.value = poolsData.query;
+	});
 </script>
 
 <div class="max-[500px]:self-stretch max-[500px]:mt-2 basis-1 grow flex items-center">
@@ -56,16 +56,16 @@
 		border-radius: 60cm;
 		border: solid 1px transparent;
 		background:
-			linear-gradient(to right, #101010 0%, #101010 100%) padding-box,
-			linear-gradient(to right, #ed32bf 0%, #8eeafc 100%) border-box;
+			linear-gradient(to right, var(--black) 0%, var(--black) 100%) padding-box,
+			linear-gradient(to right, var(--mulberry) 0%, var(--blue) 100%) border-box;
 	}
 
 	button.black {
-		background-color: black;
-		fill: #fff8;
+		background-color: var(--black);
+		fill: var(--transparent);
 	}
 	button.pink {
-		background-color: #ff9ced;
+		background-color: var(--pink);
 		fill: black;
 	}
 	button:hover::before {

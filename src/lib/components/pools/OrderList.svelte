@@ -27,7 +27,7 @@
 		<span>Volume</span>
 		<span>Price Range</span>
 	</div>
-	<hr class="border-gray-600 border-1" />
+	<hr class="border-[var(--border)] border-1" />
 	{#each orders as info}
 		<OrderListEntry order={info} {sell} {loading} />
 	{:else}
@@ -45,10 +45,10 @@
 	}
 	.title {
 		border-radius: 0 1.5rem 0 0;
-		text-decoration-color: #8eeafc;
+		text-decoration-color: var(--blue);
 		&.sell {
 			border-radius: 1.5rem 0 0 0;
-			text-decoration-color: #ed32bf;
+			text-decoration-color: var(--mulberry);
 		}
 	}
 
