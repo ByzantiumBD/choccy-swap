@@ -11,7 +11,7 @@
 	let { children } = $props();
 
 	let isSwap = $derived(page.url.pathname === "/");
-	let loading = $state(false)
+	let loading = $state(true)
 
 	onMount(async () => {
 		await connect()
