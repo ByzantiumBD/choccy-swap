@@ -45,8 +45,8 @@
 	{onmouseenter}
 	{onmouseleave}
 	class="allcenter z-20 !items-stretch flex-col {isError
-		? 'bg-[#ed32bf] text-white'
-		: 'bg-[#1a1a1a] text-[#8eeafc]'} p-4 mt-5 rounded-3xl w-[20rem]"
+		? 'bg-[var(--mulberry)] text-white'
+		: 'bg-[var(--dark-gray)] text-[var(--blue)]'} p-4 mt-5 rounded-3xl w-[20rem]"
 >
 	<div class="allcenter">
 		<span class="font-extrabold text-2xl mr-auto">{isError ? 'Error!' : 'Success!'}</span>
