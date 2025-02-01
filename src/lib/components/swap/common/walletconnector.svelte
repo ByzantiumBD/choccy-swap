@@ -13,7 +13,8 @@
         modal.open();
     }
 
-	function openInfo() {
+	function openInfo(e: MouseEvent) {
+		e.stopPropagation();
 		isHidden = false;
 	}
 	function close() {
