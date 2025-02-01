@@ -47,7 +47,7 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
 	onclick={close}
-	class="bg-[#0008] z-10 absolute top-0 left-0 w-screen h-screen allcenter"
+	class="bg-[#0008] z-10 fixed top-0 left-0 w-screen h-screen allcenter"
 >
     <div
         onclick={(e) => e.stopPropagation()}
