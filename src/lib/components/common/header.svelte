@@ -23,7 +23,7 @@
 <div id="positioner" class="absolute w-full z-10">
 	<div id="header" class="allcenter bg-transparent text-white py-3 px-7">
 		<div id="header-content" class="allcenter max-w-[1200px] w-full">
-			<a href="/" id="brand" class="allcenter">
+			<a href="https://www.choc.cy/" id="brand" class="allcenter">
 				<img src={logo} alt="logo" class="h-[50px]" />
 			</a>
 			<div class="max-[779px]:hidden allcenter ml-auto">

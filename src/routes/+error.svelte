@@ -9,21 +9,21 @@
 		We didn't find the page you're looking for.
 	</span>
 	<div class="allcenter py-6 space-x-6">
-		<a href="/" id="swapbutton" class="py-1.5 px-7 font-semibold"> Back to Homepage </a>
+		<a href="https://www.choc.cy/" id="swapbutton" class="py-1.5 px-7 font-semibold"> Back to Homepage </a>
 	</div>
 </div>
 
 
 <style>
     #error {
-        border: solid 2px #ed32bf;
+        border: solid 2px var(--mulberry);
         backdrop-filter: blur(25px);
     }
 	#swapbutton {
-		background: linear-gradient(276.31deg, #ed32bf -10.17%, #b5178e 97.19%);
+		background-color: var(--mulberry);
 		border-radius: 32px;
 		backdrop-filter: blur(5.538px);
-		border: 2.34px solid #b5178e;
+		border: 2.34px solid var(--mulberry);
 
 		&:hover {
 			border: 2.34px solid rgba(255, 255, 255, 0.326);

@@ -12,12 +12,10 @@
 		placeOrder,
 		readablePriceFromPair,
 		stringFromGtvPrice,
-		stringPriceFromPair
 	} from '$lib/states/swap/order-state-interactions.svelte';
 	import ReadablePrice from '$lib/components/common/readablePrice.svelte';
-	import { makeStringValueReadablePrice, shortenNumber } from '$lib/number-utils';
+	import { makeStringValueReadablePrice } from '$lib/number-utils';
 	import ProSettings from './ProSettings.svelte';
-	import { PRICE_PRECISION } from '$lib/interactions/swaps';
 
 	let { success }: { success: (msg: string, link: string) => () => void } = $props();
 

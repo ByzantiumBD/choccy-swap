@@ -51,7 +51,7 @@
 	<div class="statsholder flex flex-col grow basis-1 mx-2 items-stretch">
 		<PoolStats id={data.id} />
 		<a
-			href="/swap?in={data.id}"
+			href="/?in={data.id}"
 			class="bgblur p-5 bg-[#c54b8c88] border-2 border-[var(--mulberry)] text-white font-bold text-xl allcenter clickable self-stretch my-5 rounded-3xl"
 		>
 			Open on Swap Page
