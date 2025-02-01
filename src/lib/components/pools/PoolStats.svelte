@@ -55,8 +55,8 @@
 	});
 </script>
 
-<div class="pool_infos bg-[#101010a0] rounded-3xl pb-3 {loading? "text-[#fff8]":""}">
-	<div class="bg-[#0008] self-stretch text-2xl font-bold rounded-t-3xl px-5 py-4">Stats</div>
+<div class="boxblur bg-[#101010a0] rounded-3xl pb-3 {loading? "text-[var(--transparent)]":""}">
+	<div class="bg-black self-stretch text-2xl font-bold rounded-t-3xl px-5 py-4">Stats</div>
 	<div class="flex items-center p-3 ml-2">
 		<Tokenimg class="w-[40px] h-[40px] mr-2" src={p.asset1.iconUrl} alt="" />
 		<span class="font-bold text-2xl mr-auto">{p.asset1.name}</span>
@@ -92,8 +92,3 @@
 	</div>
 </div>
 
-<style>
-	.pool_infos {
-		backdrop-filter: blur(15px);
-	}
-</style>
