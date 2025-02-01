@@ -26,7 +26,7 @@
 		</button>
 		<Walletconnector />
 	{:else}
-		<a href="/swap" class="clickable pinkbutton py-2 px-7 font-semibold pinkpill"> Swap Now </a>
+		<a href="/" class="clickable pinkbutton py-2 px-7 font-semibold pinkpill"> Swap Now </a>
 	{/if}
 </div>
 

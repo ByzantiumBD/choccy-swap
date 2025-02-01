@@ -34,7 +34,7 @@
 </script>
 
 <div
-	class="allcenter flex-col min-w-[600px]:w-[600px] bg-[#1a1a1a88] boxblur mx-2 rounded-3xl my-[3cm] text-white"
+	class="allcenter flex-col min-w-[600px]:w-[600px] bg-[var(--dark-gray)] boxblur mx-2 rounded-3xl my-[3cm] text-white"
 >
 	<div class="allcenter !justify-between bg-black rounded-t-3xl w-full px-6 py-5">
 		<h1 class="text-3xl font-extrabold">Swap</h1>
@@ -48,7 +48,7 @@
 
 		<div
 			id="switch-background"
-			class="absolute allcenter bg-[#252830] boxblur w-[2cm] h-[2cm] rounded-full border-[#c54b8c] border-2"
+			class="absolute allcenter bg-[var(--dark-gray)] boxblur w-[2cm] h-[2cm] rounded-full border-[#c54b8c] border-2"
 		>
 			<button onclick={switchTokens} class="allcenter clickable w-[1.5cm] h-[1.5cm] rounded-full">
 				<img src={switcharrow} alt="switch" />

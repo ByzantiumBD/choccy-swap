@@ -52,7 +52,7 @@
 			onclick={() => openTokens()}
 			class="{connectionState.loading
 				? 'disabled'
-				: ''} clickable allcenter bg-[var(--black)] rounded-full mt-1 py-2 px-3 font-bold border border-[var(--border)]"
+				: ''} clickable allcenter bg-[var(--black)] rounded-full mt-1 ml-1 py-2 px-3 font-bold border border-[var(--border)]"
 		>
 			{#if tkInfo?.asset !== undefined}
 				<Tokenimg

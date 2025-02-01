@@ -12,7 +12,7 @@
 
 <div class="flex flex-col grow {sell ? 'border-r' : ''} border-[#fff5]">
 	<h3
-		class="bg-[#0008] title {sell
+		class="bg-black title {sell
 			? 'sell'
 			: ''} p-3 text-2xl font-bold allcenter underline decoration-2"
 	>
