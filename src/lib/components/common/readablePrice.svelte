@@ -16,10 +16,10 @@
     } : Props = $props()
 </script>
 
-<span class="flex {myClass}" style="position:relative;font-size:{fontSize}rem;font-weight:500;">
+<span class="flex {myClass}" style="position:relative;font-size:{fontSize}rem;">
     {#if numberOfDecimalZeros}
         <span style="margin-right:2px;">0.0</span>
-        <span style="position:relative;bottom:-0.3rem;font-size:{smallFontSize?? fontSize*0.6}rem;font-weight:500;">
+        <span style="position:relative;bottom:-0.3rem;font-size:{smallFontSize?? fontSize*0.6}rem;">
             {numberOfDecimalZeros}
         </span>
         <span>{val}</span>

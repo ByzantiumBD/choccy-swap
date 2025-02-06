@@ -60,17 +60,17 @@
 
 	{#if swapData.token1 && swapData.token2}
 		<div class="info flex items-stretch flex-col self-stretch mx-8 text-sm mt-2">
-			<div class="flex justify-between max-[730px]:flex-col">
+			<div class="flex justify-between max-[730px]:flex-col  mt-4">
 				<span class="flex">
 					Swap
 					<ReadablePrice
-						class="mx-1"
+						class="mx-1" fontSize={0.875}
 						{...makeStringValueReadablePrice(swapData.input1.toString())}
 					/>
 					{swapData.token1?.asset.symbol}
 					for
 					<ReadablePrice
-						class="mx-1"
+						class="mx-1" fontSize={0.875}
 						{...makeStringValueReadablePrice(swapData.input2.toString())}
 					/>
 					{swapData.token2?.asset.symbol}

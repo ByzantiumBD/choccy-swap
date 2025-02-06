@@ -5,7 +5,7 @@
    viewBox="0 0 300.00507 300.06723"
    version="1.1"
    id="svg1"
-   sodipodi:docname="bg2.svg"
+   sodipodi:docname="bg.svg"
    inkscape:version="1.4 (1:1.4+202410161351+e7c3feb100)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -287,8 +287,8 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
      inkscape:zoom="0.71763604"
-     inkscape:cx="342.79215"
-     inkscape:cy="427.09672"
+     inkscape:cx="20.90196"
+     inkscape:cy="519.06535"
      inkscape:window-width="3440"
      inkscape:window-height="1353"
      inkscape:window-x="0"
@@ -429,7 +429,8 @@
      cx="792.18744" />
   <g
      id="g61"
-     transform="translate(0.0011241,-289.93995)">
+     transform="translate(0.0011241,-289.93995)"
+     style="opacity:0.2">
     <g
        id="g60"
        style="opacity:0.166247">

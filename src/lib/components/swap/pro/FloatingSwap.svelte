@@ -41,13 +41,13 @@
 						<span class="font-medium text-lg">Swap</span>
 						<ReadablePrice
 							fontSize={1.125}
-							class="mx-1"
+							class="mx-1 font-light"
 							{...makeStringValueReadablePrice(swapData.input1.toString())}
 						/>
 						<span class="font-medium text-lg">{swapData.token1?.asset.symbol} for</span>
 						<ReadablePrice
 							fontSize={1.125}
-							class="mx-1"
+							class="mx-1 font-light"
 							{...makeStringValueReadablePrice(swapData.input2.toString())}
 						/>
 						<span class="font-medium text-lg">{swapData.token2.asset.symbol}</span>
