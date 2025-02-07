@@ -11,30 +11,30 @@
 	let getFundsText: string = $state('Get funds');
 	let hideMinter = $state(false);
 
-	function getBalance() {
-		getFundsText = 'Receiving funds...';
-		mint(connectionState.session!)
-			.then(() => {
-				getFundsText = 'Assets received!';
-				refreshData();
-				new Promise<void>((resolve) => {
-					setTimeout(() => {
-						hideMinter = true;
-						resolve();
-					}, 3000);
-				});
-			})
-			.catch((e: Error) => {
-				getFundsText = 'Error!';
-				new Promise<void>((resolve) => {
-					setTimeout(() => {
-						getFundsText = 'Get funds for testing';
-						resolve();
-					}, 3000);
-				});
-				throw e;
-			});
-	}
+	// function getBalance() {
+	// 	getFundsText = 'Receiving funds...';
+	// 	mint(connectionState.session!)
+	// 		.then(() => {
+	// 			getFundsText = 'Assets received!';
+	// 			refreshData();
+	// 			new Promise<void>((resolve) => {
+	// 				setTimeout(() => {
+	// 					hideMinter = true;
+	// 					resolve();
+	// 				}, 3000);
+	// 			});
+	// 		})
+	// 		.catch((e: Error) => {
+	// 			getFundsText = 'Error!';
+	// 			new Promise<void>((resolve) => {
+	// 				setTimeout(() => {
+	// 					getFundsText = 'Get funds for testing';
+	// 					resolve();
+	// 				}, 3000);
+	// 			});
+	// 			throw e;
+	// 		});
+	// }
 
 
     async function disconnect() {
@@ -71,11 +71,9 @@
                 <Linkid account evm id={connectionState.account?.address} />
             </div>
             <div class="flex mx-5 mt-3 mb-5">
-                {#if !hideMinter}
-                    <button onclick={getBalance} class="flex-1 mr-3 clickable lilacborder py-2 px-7 font-semibold" >
-                        {getFundsText}
-                    </button>
-                {/if}
+				<a href="/orders" class="flex-1 allcenter mr-3 clickable lilacborder py-2 px-7 font-semibold" >
+					My Orders
+				</a>
                 <button onclick={disconnect} class="flex-1 clickable pinkpill py-2 px-7 font-semibold" >
                     Disconnect
                 </button>
