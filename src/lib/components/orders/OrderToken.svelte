@@ -3,7 +3,9 @@
 	import arrow from '$lib/images/common/arrowcyan.svg';
 	import { connectionState } from '$lib/states/shared/connection-state.svelte';
 	import Tokenimg from '../common/tokenimg.svelte';
+	import { swapData } from '$lib/states/swap/swap-states.svelte';
 
+    let token = $derived(swapData.token1);
 	let isTokensHidden = $state(true);
 
 	function closeTokens() {
@@ -20,13 +22,13 @@
 		? 'disabled'
 		: ''} clickable allcenter gradient bordered rounded-full py-2 px-3 font-bold"
 >
-	{#if undefined !== undefined}
-		<Tokenimg src={'abc'} alt="token logo" class="ml-1 mr-2" style="width:32px;height:32px" />
-		{'abc'}
+	{#if token?.asset !== undefined}
+		<Tokenimg src={token.asset.iconUrl} alt="token logo" class="ml-1 mr-2" style="width:32px;height:32px" />
+		{token.asset.name}
 	{:else}
 		Choose Token
 	{/if}
 	<img src={arrow} alt="choose token" class="w-[30px] h-[30px]" />
 </button>
-<Tokens isInput={true} close={closeTokens} isHidden={isTokensHidden} />
+<Tokens pos0 isInput={true} close={closeTokens} isHidden={isTokensHidden} />
 
