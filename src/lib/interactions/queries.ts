@@ -7,6 +7,7 @@ import { connectionState } from '$lib/states/shared/connection-state.svelte';
 
 export const ALL_PAIRS_QUERY_NAME = 'get_all_pairs_by_liquidity';
 export const ALL_ORDERS_QUERY_NAME = 'get_orders_by_price_range';
+export const ACCOUNT_ORDERS_QUERY_NAME = 'get_orders_by_account';
 
 export async function getAllPairsByLiquidity(
 	ccy: Asset,
@@ -45,5 +46,24 @@ export async function getAllOrdersByPriceRange(
                 max: priceMax
             }
         }
+	);
+}
+
+export async function getAllOrdersByAccount(
+	accountId: BufferId,
+	queryable: Queryable = connectionState.connection!
+): Promise<Paginator<Order>> {
+	const ccy = await getCcy();
+	return handlePagination<Order, OrderResponse>(
+		queryable,
+		(x) => x.map((y) => mapOrder(y, ccy)),
+		ACCOUNT_ORDERS_QUERY_NAME,
+		null,
+		null,
+		{
+			id: accountId,
+			asset: null,
+			price_range: null,
+		}
 	);
 }

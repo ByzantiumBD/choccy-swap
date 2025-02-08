@@ -4,6 +4,7 @@
 	import { connectionState } from '$lib/states/shared/connection-state.svelte';
 	import Tokenimg from '../common/tokenimg.svelte';
 	import { swapData } from '$lib/states/swap/swap-states.svelte';
+	import Close from '$lib/images/swap/close.svelte';
 
     let token = $derived(swapData.token1);
 	let isTokensHidden = $state(true);
@@ -13,6 +14,9 @@
 	}
 	function openTokens() {
 		isTokensHidden = false;
+	}
+	function onclick() {
+		swapData.token1 = undefined;
 	}
 </script>
 
@@ -29,6 +33,9 @@
 		Choose Token
 	{/if}
 	<img src={arrow} alt="choose token" class="w-[30px] h-[30px]" />
+</button>
+<button {onclick}>
+	<Close style="width:30px;fill:white;margin-left:0.5rem;"/>
 </button>
 <Tokens pos0 isInput={true} close={closeTokens} isHidden={isTokensHidden} />
 
